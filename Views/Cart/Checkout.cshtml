@@ -1,0 +1,131 @@
+@{
+    ViewData["Title"] = "Checkout";
+}
+
+<div class="cd-checkout-page">
+    <div class="cd-container cd-checkout-container">
+        <h1 class="cd-checkout-title">Checkout</h1>
+
+        <div class="cd-checkout-grid">
+            <section class="cd-checkout-left">
+                <div class="cd-checkout-card">
+                    <h2 class="cd-checkout-card-title">Shipping Details</h2>
+
+                    <form class="cd-checkout-form" novalidate>
+                        <div class="cd-form-row">
+                            <div class="cd-form-group">
+                                <label for="FirstName">First Name</label>
+                                <input id="FirstName" class="cd-input" placeholder="John" />
+                            </div>
+                            <div class="cd-form-group">
+                                <label for="LastName">Last Name</label>
+                                <input id="LastName" class="cd-input" placeholder="Doe" />
+                            </div>
+                        </div>
+
+                        <div class="cd-form-group">
+                            <label for="Address">Address</label>
+                            <input id="Address" class="cd-input" placeholder="123 Coffee St, Apt 4B" />
+                        </div>
+
+                        <div class="cd-form-row">
+                            <div class="cd-form-group">
+                                <label for="City">City</label>
+                                <input id="City" class="cd-input" placeholder="Mumbai" />
+                            </div>
+                            <div class="cd-form-group">
+                                <label for="State">State</label>
+                                <input id="State" class="cd-input" placeholder="MH" />
+                            </div>
+                            <div class="cd-form-group">
+                                <label for="PostalCode">Postal Code</label>
+                                <input id="PostalCode" class="cd-input" placeholder="400001" />
+                            </div>
+                        </div>
+
+                        <div class="cd-form-group">
+                            <label for="Phone">Phone Number</label>
+                            <input id="Phone" class="cd-input" placeholder="+91 98765 43210" />
+                        </div>
+                    </form>
+                </div>
+
+                <div class="cd-checkout-card">
+                    <h2 class="cd-checkout-card-title">Payment Method</h2>
+
+                    <div class="cd-payment">
+                        <label class="cd-payment-option cd-payment-option--active">
+                            <span class="cd-payment-radio">
+                                <input type="radio" name="payment" value="card" checked />
+                            </span>
+                            <span class="cd-payment-label">Credit or Debit Card</span>
+                        </label>
+
+                        <div class="cd-payment-card-fields" id="cd-card-fields">
+                            <div class="cd-form-group">
+                                <label for="CardNumber">Card Number</label>
+                                <input id="CardNumber" class="cd-input" placeholder="0000 0000 0000 0000" />
+                            </div>
+                            <div class="cd-form-row">
+                                <div class="cd-form-group">
+                                    <label for="Expiry">Expiry Date</label>
+                                    <input id="Expiry" class="cd-input" placeholder="MM/YY" />
+                                </div>
+                                <div class="cd-form-group">
+                                    <label for="Cvc">CVC</label>
+                                    <input id="Cvc" class="cd-input" placeholder="123" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <label class="cd-payment-option">
+                            <span class="cd-payment-radio">
+                                <input type="radio" name="payment" value="upi" />
+                            </span>
+                            <span class="cd-payment-label">UPI / Netbanking</span>
+                        </label>
+
+                        <label class="cd-payment-option">
+                            <span class="cd-payment-radio">
+                                <input type="radio" name="payment" value="cod" />
+                            </span>
+                            <span class="cd-payment-label">Cash on Delivery</span>
+                        </label>
+                    </div>
+                </div>
+            </section>
+
+            <aside class="cd-checkout-summary">
+                <div class="cd-checkout-card">
+                    <h2 class="cd-checkout-card-title">Order Summary</h2>
+
+                    <div id="cd-checkout-items" class="cd-checkout-items">
+                        <!-- Rendered by site.js cdRenderCheckout() -->
+                    </div>
+
+                    <div class="cd-checkout-totals">
+                        <div class="cd-summary-row">
+                            <span>Subtotal</span>
+                            <span id="cd-checkout-subtotal">₹0</span>
+                        </div>
+                        <div class="cd-summary-row">
+                            <span>Taxes (5%)</span>
+                            <span id="cd-checkout-tax">₹0</span>
+                        </div>
+                        <div class="cd-summary-divider"></div>
+                        <div class="cd-summary-row cd-summary-row--total">
+                            <span>Total</span>
+                            <span id="cd-checkout-total">₹0</span>
+                        </div>
+                    </div>
+
+                    <button type="button" class="cd-btn cd-btn-solid cd-checkout-pay-btn" id="cd-pay-now">
+                        Pay <span id="cd-checkout-pay-amount">₹0</span>
+                    </button>
+
+                    <p class="cd-checkout-note">Payments are secure and encrypted</p>
+                </div>
+            </aside>
+        </div>
+    </div>
+</div>

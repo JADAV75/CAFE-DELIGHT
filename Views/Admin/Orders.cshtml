@@ -1,0 +1,215 @@
+@{
+    ViewData["Title"] = "Manage Orders";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="cd-admin-layout">
+    <aside class="cd-admin-sidebar">
+        <div class="cd-admin-brand">
+            <div class="cd-admin-logo">CD</div>
+            <div>
+                <div class="cd-admin-brand-title">Cafe Delight</div>
+                <div class="cd-admin-brand-subtitle">Admin</div>
+            </div>
+        </div>
+        <nav class="cd-admin-nav">
+            <a asp-controller="Admin" asp-action="Dashboard" class="cd-admin-nav-item">
+                <span class="cd-admin-nav-icon">📊</span>
+                <span>Dashboard</span>
+            </a>
+            <a asp-controller="Admin" asp-action="Index" class="cd-admin-nav-item">
+                <span class="cd-admin-nav-icon">☕</span>
+                <span>Products</span>
+            </a>
+            <a asp-controller="Admin" asp-action="Users" class="cd-admin-nav-item">
+                <span class="cd-admin-nav-icon">👥</span>
+                <span>Users</span>
+            </a>
+            <a asp-controller="Admin" asp-action="Orders" class="cd-admin-nav-item is-active">
+                <span class="cd-admin-nav-icon">🧾</span>
+                <span>Orders</span>
+            </a>
+            <a asp-controller="Admin" asp-action="Settings" class="cd-admin-nav-item">
+                <span class="cd-admin-nav-icon">⚙️</span>
+                <span>Settings</span>
+            </a>
+        </nav>
+    </aside>
+
+    <section class="cd-admin-main">
+        <header class="cd-admin-topbar">
+            <div>
+                <h1 class="cd-admin-page-title">Orders</h1>
+                <p class="cd-admin-page-subtitle">Manage customer orders.</p>
+            </div>
+            <div class="cd-admin-topbar-right">
+                <div class="cd-admin-user-chip">
+                    <div class="cd-admin-user-avatar">AU</div>
+                    <span>Admin User</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="cd-admin-toolbar">
+            <div class="cd-admin-search">
+                <span class="cd-admin-search-icon">🔍</span>
+                <input id="orderSearchInput" type="text" placeholder="Search orders..." />
+            </div>
+            <div class="cd-admin-toolbar-actions">
+                <button class="cd-admin-secondary-btn" type="button">
+                    ⛃ Filter
+                </button>
+            </div>
+        </div>
+
+        <div class="cd-admin-table-card">
+            <div class="cd-admin-order-table-header-row">
+                <span>Order ID</span>
+                <span>Customer</span>
+                <span>Items</span>
+                <span>Total</span>
+                <span>Status</span>
+                <span class="cd-admin-table-actions-col">Actions</span>
+            </div>
+
+            <div id="ordersTableBody">
+                <!-- Data populated by JS -->
+            </div>
+        </div>
+    </section>
+</div>
+
+<style>
+    .cd-admin-order-table-header-row {
+        display: grid;
+        grid-template-columns: 1fr 1.5fr 2.5fr 1fr 1fr 0.8fr;
+        padding: 0.55rem 1.3rem;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #9b8574;
+        border-bottom: 1px solid #f7ece0;
+        column-gap: 1rem;
+        align-items: center;
+    }
+
+    .cd-admin-order-table-row {
+        display: grid;
+        grid-template-columns: 1fr 1.5fr 2.5fr 1fr 1fr 0.8fr;
+        padding: 0.75rem 1.3rem;
+        font-size: 0.85rem;
+        column-gap: 1rem;
+        align-items: center;
+        border-bottom: 1px solid #f7ece0;
+    }
+
+    .cd-admin-order-table-row:nth-child(even) {
+        background: #fffaf6;
+    }
+
+    .status-completed {
+        display:inline-block; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; background:#e6f4ea; color:#1e8e3e;
+    }
+    .status-pending {
+        display:inline-block; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; background:#fff3e0; color:#e65100;
+    }
+</style>
+
+<script>
+    (function () {
+        var ORDERS_KEY  = 'cd_orders_v1';
+        var SEEDED_KEY  = 'cd_orders_seeded_v1';
+
+        function loadOrders() {
+            try {
+                var raw = window.localStorage ? window.localStorage.getItem(ORDERS_KEY) : null;
+                if (raw !== null) {
+                    var parsed = JSON.parse(raw);
+                    return Array.isArray(parsed) ? parsed : [];
+                }
+                // First time ever — seed defaults and mark as seeded
+                if (!window.localStorage.getItem(SEEDED_KEY)) {
+                    var defaults = getDefaultOrders();
+                    window.localStorage.setItem(ORDERS_KEY, JSON.stringify(defaults));
+                    window.localStorage.setItem(SEEDED_KEY, '1');
+                    return defaults;
+                }
+                return [];
+            } catch (e) { return []; }
+        }
+
+        function saveOrders(orders) {
+            try {
+                window.localStorage.setItem(ORDERS_KEY, JSON.stringify(orders || []));
+                window.localStorage.setItem(SEEDED_KEY, '1'); // mark seeded
+            } catch (e) {}
+        }
+
+        function getDefaultOrders() {
+            return [
+                { id: '#ORD-0092', customer: 'Amit Sharma',  items: '2x Cappuccino, 1x Croissant', total: '₹450',  status: 'Completed' },
+                { id: '#ORD-0093', customer: 'Priya Verma',  items: '1x Iced Latte',               total: '₹220',  status: 'Pending'   },
+                { id: '#ORD-0094', customer: 'Rahul Singh',  items: '4x Espresso, 2x Muffin',      total: '₹860',  status: 'Completed' },
+                { id: '#ORD-0095', customer: 'Neha Patel',   items: '1x Blueberry Cheesecake',     total: '₹250',  status: 'Pending'   }
+            ];
+        }
+
+        var ordersCache = loadOrders();
+        // Do NOT re-seed here — deletion must persist
+
+        var tbody     = document.getElementById('ordersTableBody');
+        var searchInput = document.getElementById('orderSearchInput');
+
+        function render(query) {
+            tbody.innerHTML = '';
+            var list = ordersCache;
+            if (query) {
+                var q = query.toLowerCase();
+                list = list.filter(function (o) {
+                    return (o.id + ' ' + o.customer + ' ' + o.status).toLowerCase().indexOf(q) !== -1;
+                });
+            }
+
+            if (list.length === 0) {
+                tbody.innerHTML = '<div style="padding:2rem;text-align:center;color:#b89880;">No orders found.</div>';
+                return;
+            }
+
+            list.forEach(function (o) {
+                var row = document.createElement('div');
+                row.className = 'cd-admin-order-table-row';
+                var stClass = (o.status || '').toLowerCase() === 'completed' ? 'status-completed' : 'status-pending';
+
+                row.innerHTML =
+                    '<div style="font-weight:600;color:#3b2418;">' + o.id + '</div>' +
+                    '<div style="color:#5b4636;">' + (o.customer || '') + '</div>' +
+                    '<div style="color:#888;">' + (o.items || '') + '</div>' +
+                    '<div style="font-weight:600;">' + (o.total || '') + '</div>' +
+                    '<div><span class="' + stClass + '">' + (o.status || '') + '</span></div>' +
+                    '<div class="cd-admin-table-actions">' +
+                    '  <button type="button" class="cd-admin-icon-btn ord-delete-btn" title="Delete Order">🗑</button>' +
+                    '</div>';
+
+                var delBtn = row.querySelector('.ord-delete-btn');
+                if (delBtn) {
+                    delBtn.addEventListener('click', function () {
+                        var ok = confirm('Delete order ' + o.id + ' permanently?');
+                        if (!ok) return;
+                        ordersCache = ordersCache.filter(function (x) { return x.id !== o.id; });
+                        saveOrders(ordersCache);
+                        render(searchInput ? searchInput.value.trim() : '');
+                    });
+                }
+
+                tbody.appendChild(row);
+            });
+        }
+
+        if (searchInput) {
+            searchInput.addEventListener('input', function () {
+                render(searchInput.value.trim());
+            });
+        }
+
+        render('');
+    })();
+</script>

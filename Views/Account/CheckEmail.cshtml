@@ -1,0 +1,22 @@
+@{
+    ViewData["Title"] = "Check Your Email";
+}
+
+<div class="cd-auth-card">
+    <h1 class="cd-auth-title">Check your email</h1>
+    <p class="cd-auth-subtitle">
+        We have sent a password reset link to your email address.
+        Please open your email and follow the link to create a new password.
+    </p>
+
+    <a class="cd-btn cd-btn-solid cd-submit-btn"
+       asp-controller="Account" asp-action="Login">
+        Back to Login
+    </a>
+
+    <div class="cd-auth-bottom-text">
+        Didn’t receive the email?
+        <a asp-controller="Account" asp-action="ForgotPassword">Try again</a>
+    </div>
+</div>
+

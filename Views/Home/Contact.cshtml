@@ -1,0 +1,84 @@
+@{
+    ViewData["Title"] = "Contact Us";
+}
+
+<div class="contact-page">
+    <div class="contact-hero">
+        <div class="cd-container">
+            <h1>Contact Us</h1>
+            <p>We'd love to hear from you. Get in touch with us!</p>
+        </div>
+    </div>
+
+    <div class="cd-container contact-content">
+        <div class="contact-card contact-info">
+            <h2>Get in Touch</h2>
+
+            <div class="contact-info-item">
+                <div class="contact-icon">📍</div>
+                <div>
+                    <h3>Visit Us</h3>
+                    <p>123 Coffee Street, Flavor Town,<br />NY 10012, United States</p>
+                </div>
+            </div>
+
+            <div class="contact-info-item">
+                <div class="contact-icon">📞</div>
+                <div>
+                    <h3>Call Us</h3>
+                    <p>+1 (555) 123-4567</p>
+                </div>
+            </div>
+
+            <div class="contact-info-item">
+                <div class="contact-icon">✉️</div>
+                <div>
+                    <h3>Email Us</h3>
+                    <p>hello@cafedelight.com</p>
+                </div>
+            </div>
+
+            <div class="contact-info-item">
+                <div class="contact-icon">⏰</div>
+                <div>
+                    <h3>Opening Hours</h3>
+                    <p>
+                        Mon – Fri: 7:00 AM – 9:00 PM<br />
+                        Sat – Sun: 8:00 AM – 10:00 PM
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="contact-card contact-form">
+            <h2>Send Message</h2>
+
+            <form method="post" novalidate>
+                <div class="cd-form-group">
+                    <label for="FullName">Full Name</label>
+                    <input id="FullName" name="FullName" class="cd-input" placeholder="Enter your name" />
+                </div>
+
+                <div class="cd-form-group">
+                    <label for="Email">Email Address</label>
+                    <input id="Email" name="Email" type="email" class="cd-input" placeholder="Enter your email" />
+                </div>
+
+                <div class="cd-form-group">
+                    <label for="Subject">Subject</label>
+                    <input id="Subject" name="Subject" class="cd-input" placeholder="How can we help?" />
+                </div>
+
+                <div class="cd-form-group">
+                    <label for="Message">Message</label>
+                    <textarea id="Message" name="Message" rows="4" class="cd-input" placeholder="Write your message here..."></textarea>
+                </div>
+
+                <button type="submit" class="cd-btn cd-btn-solid contact-submit-btn">
+                    Send Message
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+

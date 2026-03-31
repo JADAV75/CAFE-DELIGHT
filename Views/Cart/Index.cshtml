@@ -1,0 +1,60 @@
+@{
+    ViewData["Title"] = "Your Cart";
+}
+
+<div class="cd-cart-page">
+    <div class="cd-container cd-cart-container">
+        <h1 class="cd-cart-title">Your Cart</h1>
+
+        <div class="cd-cart-grid">
+            <section class="cd-cart-card">
+                <div id="cd-cart-items" class="cd-cart-items">
+                    <!-- Rendered by JS -->
+                </div>
+
+                <a asp-controller="Home" asp-action="Menu" class="cd-cart-back-link">
+                    ← Continue Shopping
+                </a>
+            </section>
+
+            <aside class="cd-cart-summary-card">
+                <h2 class="cd-cart-summary-title">Order Summary</h2>
+
+                <div class="cd-cart-summary-rows">
+                    <div class="cd-summary-row">
+                        <span>Subtotal</span>
+                        <span id="cd-summary-subtotal">₹0</span>
+                    </div>
+                    <div class="cd-summary-row cd-summary-row--discount">
+                        <span>Discount</span>
+                        <span id="cd-summary-discount">₹0</span>
+                    </div>
+                    <div class="cd-summary-row">
+                        <span>Taxes (5%)</span>
+                        <span id="cd-summary-tax">₹0</span>
+                    </div>
+                    <div class="cd-summary-divider"></div>
+                    <div class="cd-summary-row cd-summary-row--total">
+                        <span>Total</span>
+                        <span id="cd-summary-total">₹0</span>
+                    </div>
+                </div>
+
+                <div class="cd-coupon">
+                    <label class="cd-coupon-label" for="cd-coupon-code">Have a coupon code?</label>
+                    <div class="cd-coupon-row">
+                        <input id="cd-coupon-code" class="cd-coupon-input" placeholder="Enter code" />
+                        <button type="button" class="cd-coupon-apply" id="cd-apply-coupon">Apply</button>
+                    </div>
+                </div>
+
+                <a asp-controller="Cart" asp-action="Checkout" class="cd-btn cd-btn-solid cd-cart-checkout-btn" id="cd-proceed-checkout">
+                    Proceed to Checkout
+                </a>
+
+                <p class="cd-cart-secure-note">Secure Checkout powered by Stripe</p>
+            </aside>
+        </div>
+    </div>
+</div>
+

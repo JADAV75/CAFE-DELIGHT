@@ -1,0 +1,48 @@
+@{
+    ViewData["Title"] = "Create Account";
+}
+
+<div class="cd-auth-card">
+    <h1 class="cd-auth-title">Create Account</h1>
+    <p class="cd-auth-subtitle">Join us for fresh coffee and great moments.</p>
+
+    <form asp-action="Register" asp-controller="Account" method="post" id="registerForm" onsubmit="return validateRegisterForm();">
+        <div class="cd-form-group">
+            <label for="FullName">Full Name</label>
+            <input class="cd-input" type="text" id="FullName" name="fullName" />
+            <div class="cd-error-text" id="FullNameError"></div>
+        </div>
+
+        <div class="cd-form-group">
+            <label for="RegEmail">Email Address</label>
+            <input class="cd-input" type="email" id="RegEmail" name="email" />
+            <div class="cd-error-text" id="RegEmailError"></div>
+        </div>
+
+        <div class="cd-form-group">
+            <label for="Phone">Phone Number</label>
+            <input class="cd-input" type="tel" id="Phone" name="phone" />
+            <div class="cd-error-text" id="PhoneError"></div>
+        </div>
+
+        <div class="cd-form-group">
+            <label for="RegPassword">Password</label>
+            <input class="cd-input" type="password" id="RegPassword" name="password" />
+            <div class="cd-error-text" id="RegPasswordError"></div>
+        </div>
+
+        <div class="cd-form-group">
+            <label for="ConfirmPassword">Confirm Password</label>
+            <input class="cd-input" type="password" id="ConfirmPassword" name="confirmPassword" />
+            <div class="cd-error-text" id="ConfirmPasswordError"></div>
+        </div>
+
+        <button type="submit" class="cd-btn cd-btn-solid cd-submit-btn">Register</button>
+
+        <div class="cd-auth-bottom-text">
+            Already have an account?
+            <a asp-action="Login" asp-controller="Account">Login</a>
+        </div>
+    </form>
+</div>
+

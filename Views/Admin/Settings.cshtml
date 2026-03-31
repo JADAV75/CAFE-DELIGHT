@@ -1,0 +1,253 @@
+@{
+    ViewData["Title"] = "Settings";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="cd-admin-layout">
+    <aside class="cd-admin-sidebar">
+        <div class="cd-admin-brand">
+            <div class="cd-admin-logo">CD</div>
+            <div>
+                <div class="cd-admin-brand-title">Cafe Delight</div>
+                <div class="cd-admin-brand-subtitle">Admin</div>
+            </div>
+        </div>
+        <nav class="cd-admin-nav">
+            <a asp-controller="Admin" asp-action="Dashboard" class="cd-admin-nav-item">
+                <span class="cd-admin-nav-icon">📊</span>
+                <span>Dashboard</span>
+            </a>
+            <a asp-controller="Admin" asp-action="Index" class="cd-admin-nav-item">
+                <span class="cd-admin-nav-icon">☕</span>
+                <span>Products</span>
+            </a>
+            <a asp-controller="Admin" asp-action="Users" class="cd-admin-nav-item">
+                <span class="cd-admin-nav-icon">👥</span>
+                <span>Users</span>
+            </a>
+            <a asp-controller="Admin" asp-action="Orders" class="cd-admin-nav-item">
+                <span class="cd-admin-nav-icon">🧾</span>
+                <span>Orders</span>
+            </a>
+            <a asp-controller="Admin" asp-action="Settings" class="cd-admin-nav-item is-active">
+                <span class="cd-admin-nav-icon">⚙️</span>
+                <span>Settings</span>
+            </a>
+        </nav>
+    </aside>
+
+    <section class="cd-admin-main">
+        <header class="cd-admin-topbar">
+            <div>
+                <h1 class="cd-admin-page-title">Settings</h1>
+            </div>
+            <div class="cd-admin-topbar-right">
+                <div class="cd-admin-user-chip">
+                    <div class="cd-admin-user-avatar">AU</div>
+                    <span>Admin User</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Change Password Section -->
+        <div class="cd-settings-card">
+            <h2 class="cd-settings-card-title">Change Password</h2>
+            <p class="cd-settings-card-desc">Ensure your account is using a long, random password to stay secure.</p>
+
+            <div class="cd-settings-form-group">
+                <label class="cd-settings-label">Current Password</label>
+                <input type="password" class="cd-settings-input" id="currentPassword" placeholder="Enter current password" />
+            </div>
+
+            <div class="cd-settings-form-group">
+                <label class="cd-settings-label">New Password</label>
+                <input type="password" class="cd-settings-input" id="newPassword" placeholder="Enter new password" />
+            </div>
+
+            <div class="cd-settings-form-group">
+                <label class="cd-settings-label">Confirm New Password</label>
+                <input type="password" class="cd-settings-input" id="confirmPassword" placeholder="Confirm new password" />
+            </div>
+
+            <button type="button" class="cd-settings-update-btn" id="updatePasswordBtn">Update Password</button>
+        </div>
+
+        <!-- Log Out Section -->
+        <div class="cd-settings-card cd-settings-logout-card">
+            <div class="cd-settings-logout-row">
+                <div>
+                    <h2 class="cd-settings-logout-title">Log Out</h2>
+                    <p class="cd-settings-card-desc" style="margin:0;">Log out of your account on this device.</p>
+                </div>
+                <button type="button" class="cd-settings-logout-btn" id="adminLogoutBtn">
+                    ↪ Log Out
+                </button>
+            </div>
+        </div>
+    </section>
+</div>
+
+<style>
+    .cd-settings-card {
+        background: #fff;
+        border-radius: 12px;
+        padding: 28px 32px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+        border: 1px solid #f0e8e0;
+        margin-bottom: 24px;
+        max-width: 680px;
+    }
+
+    .cd-settings-card-title {
+        font-size: 16px;
+        font-weight: 700;
+        color: #222;
+        margin: 0 0 6px 0;
+    }
+
+    .cd-settings-card-desc {
+        font-size: 13px;
+        color: #888;
+        margin: 0 0 22px 0;
+        line-height: 1.4;
+    }
+
+    .cd-settings-form-group {
+        margin-bottom: 18px;
+    }
+
+    .cd-settings-label {
+        display: block;
+        font-size: 13px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 6px;
+    }
+
+    .cd-settings-input {
+        width: 100%;
+        padding: 10px 14px;
+        font-size: 14px;
+        border: 1px solid #e0d6cc;
+        border-radius: 8px;
+        background: #fff;
+        color: #333;
+        outline: none;
+        transition: border-color 0.2s;
+        box-sizing: border-box;
+    }
+
+    .cd-settings-input:focus {
+        border-color: #a0785c;
+        box-shadow: 0 0 0 2px rgba(160, 120, 92, 0.12);
+    }
+
+    .cd-settings-input::placeholder {
+        color: #bbb;
+    }
+
+    .cd-settings-update-btn {
+        padding: 10px 22px;
+        background: #a0785c;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s;
+        margin-top: 4px;
+    }
+
+    .cd-settings-update-btn:hover {
+        background: #8b6548;
+    }
+
+    /* Log Out Section */
+    .cd-settings-logout-card {
+        border: 1px solid #f0e8e0;
+    }
+
+    .cd-settings-logout-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+    }
+
+    .cd-settings-logout-title {
+        font-size: 16px;
+        font-weight: 700;
+        color: #d32f2f;
+        margin: 0 0 4px 0;
+    }
+
+    .cd-settings-logout-btn {
+        padding: 9px 20px;
+        background: #fff;
+        color: #d32f2f;
+        border: 1.5px solid #d32f2f;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        white-space: nowrap;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .cd-settings-logout-btn:hover {
+        background: #d32f2f;
+        color: #fff;
+    }
+</style>
+
+<script>
+    (function () {
+        // Update Password
+        var updateBtn = document.getElementById('updatePasswordBtn');
+        if (updateBtn) {
+            updateBtn.addEventListener('click', function () {
+                var current = document.getElementById('currentPassword').value.trim();
+                var newPass = document.getElementById('newPassword').value.trim();
+                var confirm = document.getElementById('confirmPassword').value.trim();
+
+                if (!current) { alert('Please enter your current password.'); return; }
+                if (!newPass) { alert('Please enter a new password.'); return; }
+                if (newPass.length < 6) { alert('New password must be at least 6 characters.'); return; }
+                if (newPass !== confirm) { alert('New password and confirm password do not match.'); return; }
+
+                // Save password to localStorage
+                var storedPass = localStorage.getItem('cd_admin_password') || 'admin123';
+                if (current !== storedPass) {
+                    alert('Current password is incorrect.');
+                    return;
+                }
+
+                localStorage.setItem('cd_admin_password', newPass);
+                alert('Password updated successfully!');
+                document.getElementById('currentPassword').value = '';
+                document.getElementById('newPassword').value = '';
+                document.getElementById('confirmPassword').value = '';
+            });
+        }
+
+        // Logout — clear admin session and redirect to home page
+        var logoutBtn = document.getElementById('adminLogoutBtn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', function () {
+                var ok = confirm('Are you sure you want to log out?');
+                if (!ok) return;
+
+                // Clear admin login state
+                localStorage.removeItem('cd_admin_logged_in');
+                localStorage.removeItem('cd_admin_session');
+
+                // Redirect to home page
+                window.location.href = '/';
+            });
+        }
+    })();
+</script>

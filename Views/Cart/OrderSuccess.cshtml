@@ -1,0 +1,80 @@
+@{
+    ViewData["Title"] = "Order Placed Successfully";
+}
+
+<div class="cd-success-page">
+    <div class="cd-container cd-success-container">
+        <div class="cd-success-card">
+            <!-- Green checkmark circle -->
+            <div class="cd-success-icon">
+                <span class="cd-success-check">✓</span>
+            </div>
+
+            <h1 class="cd-success-title">Order Placed Successfully!</h1>
+            <p class="cd-success-msg">
+                Thank you for your purchase. Your order <strong id="cd-order-number">#CD-8842</strong> has been received and is being prepared.
+            </p>
+
+            <!-- Order summary box -->
+            <div class="cd-success-summary">
+                <div class="cd-success-summary-head">
+                    <span class="cd-success-date" id="cd-order-date">Dec 12, 2024, 10:45 AM</span>
+                </div>
+                <ul class="cd-success-items" id="cd-success-items">
+                    <!-- Filled by JS from cart, or show sample -->
+                    <li><span>2x Cappuccino</span><span>₹360.00</span></li>
+                    <li><span>1x Hazelnut Latte</span><span>₹210.00</span></li>
+                    <li><span>1x Iced Mocha</span><span>₹240.00</span></li>
+                </ul>
+                <div class="cd-success-total-row">
+                    <span>Total Amount</span>
+                    <strong id="cd-success-total">₹850.50</strong>
+                </div>
+            </div>
+
+            <!-- Shipping and delivery -->
+            <div class="cd-success-delivery">
+                <div class="cd-success-ship">
+                    <strong>Shipping To</strong>
+                    <p id="cd-ship-name">John Doe</p>
+                    <p id="cd-ship-address">123 Coffee St, Apt 4B, Mumbai, MH 400001</p>
+                </div>
+                <div class="cd-success-eta">
+                    <strong>Estimated Delivery</strong>
+                    <p>Today, 11:30 AM - 11:45 AM</p>
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="cd-success-actions">
+                <a asp-controller="Home" asp-action="Index" class="cd-btn cd-btn-outline cd-success-btn-home">Go to Home</a>
+                <a href="#" class="cd-btn cd-btn-solid cd-success-btn-track">Track Order</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    (function () {
+        if (typeof cdGetCart === 'undefined' || typeof cdCalc === 'undefined') return;
+        var cart = cdGetCart();
+        if (cart.length === 0) return;
+        var calc = cdCalc(cart);
+        var list = document.getElementById('cd-success-items');
+        var totalEl = document.getElementById('cd-success-total');
+        if (list) {
+            list.innerHTML = cart.map(function (it) {
+                var qty = it.qty || 1;
+                var price = (it.price || 0) * qty;
+                return '<li><span>' + qty + 'x ' + (it.name || 'Item') + '</span><span>₹' + price.toFixed(2) + '</span></li>';
+            }).join('');
+        }
+        if (totalEl) totalEl.textContent = '₹' + calc.total.toFixed(2);
+        var d = new Date();
+        var dateStr = d.toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' });
+        var orderDate = document.getElementById('cd-order-date');
+        if (orderDate) orderDate.textContent = dateStr;
+    })();
+</script>
+}

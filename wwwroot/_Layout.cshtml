@@ -1,0 +1,61 @@
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Cafe Delight</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <header class="cd-header">
+        <div class="cd-container cd-header-content">
+            <div class="cd-logo">Cafe Delight</div>
+            <nav class="cd-nav">
+                <a asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                <a href="#">Menu</a>
+                <a href="#">About</a>
+                <a href="#">Contact</a>
+            </nav>
+            <div class="cd-header-actions">
+                <a asp-area="" asp-controller="Account" asp-action="Register" class="cd-btn cd-btn-outline">Sign Up</a>
+                <a asp-area="" asp-controller="Account" asp-action="Login" class="cd-btn cd-btn-solid">Login</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="cd-main">
+        @RenderBody()
+    </main>
+
+    <footer class="cd-footer">
+        <div class="cd-container cd-footer-content">
+            <div class="cd-footer-column">
+                <h4>Cafe Delight</h4>
+                <p>The perfect place to relax, enjoy coffee, and work quietly.</p>
+                <p>123 Coffee Street<br />Brew City, 45678</p>
+            </div>
+            <div class="cd-footer-column">
+                <h4>Quick Links</h4>
+                <a asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                <a href="#">Menu</a>
+                <a href="#">About Us</a>
+                <a href="#">Contact</a>
+            </div>
+            <div class="cd-footer-column">
+                <h4>Contact Info</h4>
+                <p>+1 (555) 123-4567</p>
+                <p>hello@cafedelight.com</p>
+            </div>
+        </div>
+        <div class="cd-footer-bottom">
+            &copy; @DateTime.Now.Year Cafe Delight. All rights reserved.
+        </div>
+    </footer>
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

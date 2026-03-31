@@ -1,0 +1,327 @@
+.
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="cd-auth-card">
+    <h1 class="cd-auth-title">Welcome Back</h1>
+    <p class="cd-auth-subtitle">Please enter your details to sign in.</p>
+
+    <form asp-action="Login" asp-controller="Account" method="post" id="loginForm" onsubmit="return validateLoginForm();">
+        <div class="cd-form-group">
+            <label for="Email">Email Address</label>
+            <input class="cd-input" type="email" id="Email" name="email" />
+            <div class="cd-error-text" id="EmailError"></div>
+        </div>
+
+        <div class="cd-form-group">
+            <label for="Password">Password</label>
+            <input class="cd-input" type="password" id="Password" name="password" />
+            <div class="cd-error-text" id="PasswordError"></div>
+        </div>
+
+        <div class="cd-form-footer">
+            <a asp-controller="Account" asp-action="ForgotPassword">Forgot Password?</a>
+        </div>
+
+        <button type="submit" class="cd-btn cd-btn-solid cd-submit-btn">Login</button>
+
+        <div class="cd-auth-bottom-text">
+            Don't have an account?
+            <a asp-action="Register" asp-controller="Account">Sign up</a>
+        </div>
+    </form>
+
+    <!-- Admin: opens popup (UI only). Sign In in popup → Admin dashboard. -->
+    <p class="cd-admin-hint">Are you an <strong>admin</strong>? Click below to open the admin login popup.</p>
+    <div class="cd-admin-entry">
+        <button type="button" class="cd-btn cd-btn-ghost" id="openAdminPanelBtn">
+            Open admin login
+        </button>
+    </div>
+</div>
+
+<!-- Admin Panel Popup (UI only) -->
+<div id="adminPanelModal" class="cd-modal-overlay" style="display:none;">
+    <div class="cd-modal cd-admin-login-card">
+        <button type="button" class="cd-modal-close" id="closeAdminPanelBtn">&times;</button>
+
+        <div class="cd-admin-login-header">
+            <div class="cd-admin-login-logo" aria-hidden="true">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 10h11a3 3 0 0 1 3 3v0a3 3 0 0 1-3 3h-1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                    <path d="M5 10V18a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                    <path d="M8 6c.5-1.5 2-2.5 4-2.5s3.5 1 4 2.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" />
+                    <path d="M7 4.5c0 0 1-2 3.5-2S14 4.5 14 4.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" opacity="0.85" />
+                </svg>
+            </div>
+            <div class="cd-admin-login-text">
+                <h2 class="cd-admin-login-title">Cafe Delight</h2>
+                <p class="cd-admin-login-subtitle">Admin Panel Login</p>
+            </div>
+        </div>
+
+        <div class="cd-modal-body">
+            <div class="cd-form-group">
+                <label for="AdminEmail">Email Address</label>
+                <input class="cd-input cd-admin-modal-input" type="email" id="AdminEmail" placeholder="Enter admin email" />
+            </div>
+
+            <div class="cd-form-group cd-admin-password-row">
+                <div class="cd-admin-password-main">
+                    <label for="AdminPassword">Password</label>
+                    <input class="cd-input cd-admin-modal-input" type="password" id="AdminPassword" placeholder="Enter password" />
+                </div>
+                <a asp-controller="Account" asp-action="ForgotPassword" class="cd-admin-forgot-link">Forgot Password?</a>
+            </div>
+
+            <button type="button" class="cd-btn cd-btn-solid cd-admin-login-btn" id="enterAdminPanelBtn">
+                Sign In
+                <span class="cd-admin-login-arrow">&rarr;</span>
+            </button>
+
+            <p class="cd-admin-login-footer">
+                &copy; @DateTime.Now.Year Cafe Delight. All rights reserved.
+            </p>
+        </div>
+    </div>
+</div>
+
+<style>
+    .cd-admin-hint {
+        margin-top: 1.25rem;
+        margin-bottom: 0.35rem;
+        text-align: center;
+        font-size: 0.85rem;
+        color: #7b6a5f;
+        line-height: 1.4;
+    }
+
+    .cd-admin-entry {
+        margin-top: 0.25rem;
+        text-align: center;
+    }
+
+    .cd-btn.cd-btn-ghost {
+        background: transparent;
+        border: 1px solid #ddd;
+        color: #444;
+        padding: 0.5rem 1.25rem;
+        border-radius: 999px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: all 0.2s ease;
+    }
+
+    .cd-btn.cd-btn-ghost:hover {
+        border-color: #333;
+        color: #111;
+        background-color: #f7f7f7;
+    }
+
+    .cd-modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(249, 244, 241, 0.92);
+        backdrop-filter: blur(4px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1050;
+        padding: 1rem;
+    }
+
+    .cd-admin-modal-input {
+        background: #f2f2f2 !important;
+        border: 1px solid #ebe5e0 !important;
+        border-radius: 10px !important;
+    }
+
+    .cd-modal {
+        background: #fff;
+        border-radius: 18px;
+        max-width: 420px;
+        width: 100%;
+        box-shadow: 0 24px 50px rgba(15, 23, 42, 0.28);
+        animation: cd-modal-in 0.22s ease-out;
+        position: relative;
+    }
+
+    .cd-admin-login-card {
+        padding: 2.1rem 2.4rem 2.2rem;
+    }
+
+    .cd-modal-close {
+        position: absolute;
+        top: 0.8rem;
+        right: 0.9rem;
+        border: none;
+        background: transparent;
+        font-size: 1.35rem;
+        line-height: 1;
+        cursor: pointer;
+        color: #c2b4a8;
+        padding: 0;
+    }
+
+    .cd-modal-close:hover {
+        color: #8b4c25;
+    }
+
+    .cd-admin-login-header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 1.4rem;
+    }
+
+    .cd-admin-login-logo {
+        width: 56px;
+        height: 56px;
+        border-radius: 14px;
+        background: #5d3a26;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        box-shadow: 0 12px 26px rgba(93, 58, 38, 0.4);
+    }
+
+    .cd-admin-login-title {
+        margin: 0;
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #3b2418;
+        text-align: center;
+    }
+
+    .cd-admin-login-subtitle {
+        margin: 0;
+        font-size: 0.85rem;
+        color: #9f8876;
+        text-align: center;
+    }
+
+    .cd-modal-body {
+        padding: 0;
+    }
+
+    .cd-admin-password-row {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: end;
+        column-gap: 0.5rem;
+    }
+
+    .cd-admin-password-main label {
+        display: block;
+    }
+
+    .cd-admin-forgot-link {
+        font-size: 0.8rem;
+        color: #a36b3e;
+        text-decoration: none;
+        margin-bottom: 0.25rem;
+    }
+
+    .cd-admin-forgot-link:hover {
+        text-decoration: underline;
+    }
+
+    .cd-admin-login-btn {
+        width: 100%;
+        margin-top: 1.25rem;
+        background: #8b4c25;
+        border-radius: 999px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+        box-shadow: 0 14px 30px rgba(139, 76, 37, 0.45);
+    }
+
+    .cd-admin-login-btn:hover {
+        background: #7a4320;
+    }
+
+    .cd-admin-login-arrow {
+        font-size: 1rem;
+    }
+
+    .cd-admin-login-footer {
+        margin-top: 1.4rem;
+        text-align: center;
+        font-size: 0.75rem;
+        color: #b5a294;
+    }
+
+    @@keyframes cd-modal-in {
+        from {
+            opacity: 0;
+            transform: translateY(10px) scale(0.98);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+</style>
+
+<script>
+    (function () {
+        var openBtn = document.getElementById('openAdminPanelBtn');
+        var closeBtn = document.getElementById('closeAdminPanelBtn');
+        var modal = document.getElementById('adminPanelModal');
+        var enterBtn = document.getElementById('enterAdminPanelBtn');
+        var adminPassword = document.getElementById('AdminPassword');
+        var adminUrl = '@Url.Action("Index", "Admin")';
+
+        if (!modal) return;
+
+        function openModal() {
+            modal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            modal.style.display = 'none';
+        }
+
+        function goToAdminPanel() {
+            window.location.href = adminUrl;
+        }
+
+        if (openBtn) {
+            openBtn.addEventListener('click', openModal);
+        }
+
+        if (closeBtn) {
+            closeBtn.addEventListener('click', closeModal);
+        }
+
+        if (enterBtn) {
+            enterBtn.addEventListener('click', goToAdminPanel);
+        }
+
+        if (adminPassword) {
+            adminPassword.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    goToAdminPanel();
+                }
+            });
+        }
+
+        modal.addEventListener('click', function (e) {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && modal.style.display === 'flex') {
+                closeModal();
+            }
+        });
+    })();
+</script>

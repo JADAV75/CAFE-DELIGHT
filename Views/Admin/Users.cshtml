@@ -1,0 +1,358 @@
+@{
+    ViewData["Title"] = "Manage Users";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="cd-admin-layout">
+    <aside class="cd-admin-sidebar">
+        <div class="cd-admin-brand">
+            <div class="cd-admin-logo">CD</div>
+            <div>
+                <div class="cd-admin-brand-title">Cafe Delight</div>
+                <div class="cd-admin-brand-subtitle">Admin</div>
+            </div>
+        </div>
+        <nav class="cd-admin-nav">
+            <a asp-controller="Admin" asp-action="Dashboard" class="cd-admin-nav-item">
+                <span class="cd-admin-nav-icon">📊</span>
+                <span>Dashboard</span>
+            </a>
+            <a asp-controller="Admin" asp-action="Index" class="cd-admin-nav-item">
+                <span class="cd-admin-nav-icon">☕</span>
+                <span>Products</span>
+            </a>
+            <a asp-controller="Admin" asp-action="Users" class="cd-admin-nav-item is-active">
+                <span class="cd-admin-nav-icon">👥</span>
+                <span>Users</span>
+            </a>
+            <a asp-controller="Admin" asp-action="Orders" class="cd-admin-nav-item">
+                <span class="cd-admin-nav-icon">🧾</span>
+                <span>Orders</span>
+            </a>
+            <a asp-controller="Admin" asp-action="Settings" class="cd-admin-nav-item">
+                <span class="cd-admin-nav-icon">⚙️</span>
+                <span>Settings</span>
+            </a>
+        </nav>
+    </aside>
+
+    <section class="cd-admin-main">
+        <header class="cd-admin-topbar">
+            <div>
+                <h1 class="cd-admin-page-title">Manage Users</h1>
+                <p class="cd-admin-page-subtitle">Add or delete users.</p>
+            </div>
+            <div class="cd-admin-topbar-right">
+                <div class="cd-admin-user-chip">
+                    <div class="cd-admin-user-avatar">AU</div>
+                    <span>Admin User</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="cd-admin-toolbar">
+            <div class="cd-admin-search">
+                <span class="cd-admin-search-icon">🔍</span>
+                <input id="userSearchInput" type="text" placeholder="Search users..." />
+            </div>
+            <div class="cd-admin-toolbar-actions">
+                <button class="cd-admin-secondary-btn" type="button">
+                    ⛃ Filter
+                </button>
+                <a asp-controller="Admin" asp-action="AddUser" class="cd-admin-primary-btn" style="text-decoration:none; display:inline-flex; align-items:center;">
+                    + Add User
+                </a>
+            </div>
+        </div>
+
+        <div class="cd-admin-table-card">
+            <div class="cd-admin-user-table-header-row">
+                <span>Avatar</span>
+                <span>Name</span>
+                <span>Email</span>
+                <span>Status</span>
+                <span class="cd-admin-table-actions-col">Actions</span>
+            </div>
+
+            <div id="usersTableBody">
+                <!-- rows rendered by JS -->
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Add User Modal has been moved to a dedicated page (AddUser.cshtml) -->
+
+<style>
+    .cd-admin-user-table-header-row {
+        display: grid;
+        grid-template-columns: 0.8fr 1.3fr 1.8fr 1fr 0.7fr;
+        padding: 0.55rem 1.3rem;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #9b8574;
+        border-bottom: 1px solid #f7ece0;
+        column-gap: 1rem;
+        align-items: center;
+    }
+
+    .cd-admin-user-table-row {
+        display: grid;
+        grid-template-columns: 0.8fr 1.3fr 1.8fr 1fr 0.7fr;
+        padding: 0.75rem 1.3rem;
+        font-size: 0.8rem;
+        column-gap: 1rem;
+        align-items: center;
+        border-bottom: 1px solid #f7ece0;
+    }
+
+    .cd-admin-user-table-row:nth-child(even) {
+        background: #fffaf6;
+    }
+
+    .cd-admin-user-avatar-circle {
+        width: 34px;
+        height: 34px;
+        border-radius: 999px;
+        background: #f3e0ce;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        color: #3b2418;
+        font-size: 0.75rem;
+    }
+
+    .cd-admin-user-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.35);
+        backdrop-filter: blur(4px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        padding: 1rem;
+    }
+
+    .cd-admin-user-modal {
+        width: 100%;
+        max-width: 520px;
+        background: #fff;
+        border: 1px solid #f1e2d4;
+        border-radius: 18px;
+        box-shadow: 0 24px 60px rgba(15, 23, 42, 0.18);
+        padding: 1.25rem 1.4rem 1.3rem;
+        position: relative;
+    }
+
+    .cd-admin-user-modal-close {
+        position: absolute;
+        top: 0.9rem;
+        right: 1rem;
+        border: none;
+        background: transparent;
+        font-size: 1.6rem;
+        cursor: pointer;
+        color: #a59a8c;
+        padding: 0;
+        line-height: 1;
+    }
+
+    .cd-admin-user-modal-title {
+        margin: 0 0 1rem;
+        font-size: 1.15rem;
+        font-weight: 650;
+        color: #3b2418;
+    }
+
+    .cd-admin-user-modal-body {
+        padding-top: 0.2rem;
+    }
+
+    .cd-admin-form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.6rem;
+        margin-top: 1.25rem;
+        padding-top: 1rem;
+        border-top: 1px solid #f1e2d4;
+    }
+</style>
+
+<script>
+    (function () {
+        var STORAGE_KEY = 'cd_admin_users_v1';
+
+        function loadUsers() {
+            try {
+                var raw = window.localStorage ? window.localStorage.getItem(STORAGE_KEY) : null;
+                if (!raw) return [];
+                var parsed = JSON.parse(raw);
+                return Array.isArray(parsed) ? parsed : [];
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function saveUsers(users) {
+            try {
+                window.localStorage.setItem(STORAGE_KEY, JSON.stringify(users || []));
+            } catch (e) {
+                // ignore
+            }
+        }
+
+        function seedUsersIfEmpty(users) {
+            if (users && users.length > 0) return users;
+
+            return [
+                { id: 'u1', name: 'Priya Sharma', email: 'priya.sharma@gmail.com', status: 'Active', deleted: false },
+                { id: 'u2', name: 'Maria Rodriguez', email: 'maria@gmail.com', status: 'Active', deleted: false },
+                { id: 'u3', name: 'Robert Johnson', email: 'robert@gmail.com', status: 'Blocked', deleted: false }
+            ];
+        }
+
+        function initials(name) {
+            var parts = (name || '').trim().split(/\s+/).filter(Boolean);
+            if (parts.length === 0) return 'U';
+            if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+            return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+        }
+
+        var usersCache = loadUsers();
+        usersCache = seedUsersIfEmpty(usersCache);
+        saveUsers(usersCache);
+
+        var tbody = document.getElementById('usersTableBody');
+        var searchInput = document.getElementById('userSearchInput');
+
+        var modalOverlay = document.getElementById('addUserModalOverlay');
+        var openAddUserBtn = document.getElementById('openAddUserBtn');
+        var closeAddUserBtn = document.getElementById('closeAddUserBtn');
+        var cancelAddUserBtn = document.getElementById('cancelAddUserBtn');
+        var saveAddUserBtn = document.getElementById('saveAddUserBtn');
+
+        var newUserName = document.getElementById('newUserName');
+        var newUserEmail = document.getElementById('newUserEmail');
+        var newUserStatus = document.getElementById('newUserStatus');
+
+        var searchQuery = '';
+
+        function statusPillClass(status) {
+            if ((status || '').toLowerCase() === 'blocked') return 'is-blocked';
+            return 'is-active';
+        }
+
+        function statusLabel(status) {
+            if ((status || '').toLowerCase() === 'blocked') return 'Blocked';
+            return 'Active';
+        }
+
+        function render() {
+            if (!tbody) return;
+
+            var list = (usersCache || []).filter(function (u) { return !u.deleted; });
+
+            if (searchQuery) {
+                var q = searchQuery.toLowerCase();
+                list = list.filter(function (u) {
+                    var s = (u.name || '') + ' ' + (u.email || '') + ' ' + (u.status || '');
+                    return s.toLowerCase().indexOf(q) !== -1;
+                });
+            }
+
+            tbody.innerHTML = '';
+
+            list.forEach(function (u) {
+                var row = document.createElement('div');
+                row.className = 'cd-admin-user-table-row';
+                row.dataset.userId = u.id || '';
+
+                var pillClass = statusPillClass(u.status);
+                var pillText = statusLabel(u.status);
+
+                row.innerHTML =
+                    '<div class="cd-admin-user-avatar-circle">' + initials(u.name) + '</div>' +
+                    '<div style="font-weight:600;color:#3b2418;">' + (u.name || '') + '</div>' +
+                    '<div style="color:#5b4636;">' + (u.email || '') + '</div>' +
+                    '<div><span class="cd-admin-status-pill ' + pillClass + '">' + pillText + '</span></div>' +
+                    '<div class="cd-admin-table-actions">' +
+                    '  <button type="button" class="cd-admin-icon-btn" title="Delete">🗑</button>' +
+                    '</div>';
+
+                var deleteBtn = row.querySelector('button[title="Delete"]');
+                if (deleteBtn) {
+                    deleteBtn.addEventListener('click', function () {
+                        var ok = confirm('Delete user "' + (u.name || 'User') + '" permanently?');
+                        if (!ok) return;
+                        u.deleted = true;
+                        saveUsers(usersCache);
+                        render();
+                    });
+                }
+
+                tbody.appendChild(row);
+            });
+        }
+
+        function openModal() {
+            if (!modalOverlay) return;
+            modalOverlay.style.display = 'flex';
+        }
+
+        function closeModal() {
+            if (!modalOverlay) return;
+            modalOverlay.style.display = 'none';
+        }
+
+        if (openAddUserBtn) openAddUserBtn.addEventListener('click', openModal);
+        if (closeAddUserBtn) closeAddUserBtn.addEventListener('click', closeModal);
+        if (cancelAddUserBtn) cancelAddUserBtn.addEventListener('click', closeModal);
+
+        if (modalOverlay) {
+            modalOverlay.addEventListener('click', function (e) {
+                if (e.target === modalOverlay) closeModal();
+            });
+        }
+
+        if (saveAddUserBtn) {
+            saveAddUserBtn.addEventListener('click', function () {
+                var name = (newUserName && newUserName.value) ? newUserName.value.trim() : '';
+                var email = (newUserEmail && newUserEmail.value) ? newUserEmail.value.trim() : '';
+                var status = (newUserStatus && newUserStatus.value) ? newUserStatus.value : 'Active';
+
+                if (!name) { alert('Enter user name'); return; }
+                if (!email) { alert('Enter user email'); return; }
+
+                var newUser = {
+                    id: 'u_' + Date.now(),
+                    name: name,
+                    email: email,
+                    status: status,
+                    deleted: false
+                };
+
+                usersCache.push(newUser);
+                saveUsers(usersCache);
+
+                if (newUserName) newUserName.value = '';
+                if (newUserEmail) newUserEmail.value = '';
+                if (newUserStatus) newUserStatus.value = 'Active';
+
+                closeModal();
+                render();
+            });
+        }
+
+        if (searchInput) {
+            searchInput.addEventListener('input', function () {
+                searchQuery = (searchInput.value || '').trim();
+                render();
+            });
+        }
+
+        render();
+    })();
+</script>
+

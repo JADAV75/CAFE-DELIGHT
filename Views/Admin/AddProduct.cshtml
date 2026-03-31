@@ -1,0 +1,234 @@
+@{
+    ViewData["Title"] = "Add Product";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+<div class="cd-admin-layout">
+    <aside class="cd-admin-sidebar">
+        <div class="cd-admin-brand">
+            <div class="cd-admin-logo">☕</div>
+            <div>
+                <div class="cd-admin-brand-title">Cafe Delight</div>
+                <div class="cd-admin-brand-subtitle">Admin</div>
+            </div>
+        </div>
+        <nav class="cd-admin-nav">
+            <a asp-controller="Admin" asp-action="Dashboard" class="cd-admin-nav-item">
+                <span class="cd-admin-nav-icon">📊</span>
+                <span>Dashboard</span>
+            </a>
+            <a asp-controller="Admin" asp-action="Index" class="cd-admin-nav-item is-active">
+                <span class="cd-admin-nav-icon">🛍</span>
+                <span>Products</span>
+            </a>
+            <a asp-controller="Admin" asp-action="Users" class="cd-admin-nav-item">
+                <span class="cd-admin-nav-icon">👥</span>
+                <span>Users</span>
+            </a>
+            <a asp-controller="Admin" asp-action="Orders" class="cd-admin-nav-item">
+                <span class="cd-admin-nav-icon">🧾</span>
+                <span>Orders</span>
+            </a>
+            <a asp-controller="Admin" asp-action="Settings" class="cd-admin-nav-item">
+                <span class="cd-admin-nav-icon">⚙️</span>
+                <span>Settings</span>
+            </a>
+        </nav>
+    </aside>
+
+    <section class="cd-admin-main">
+        <header class="cd-admin-topbar">
+            <div>
+                <h1 class="cd-admin-page-title">Add Product</h1>
+            </div>
+            <div class="cd-admin-topbar-right">
+                <div class="cd-admin-user-chip">
+                    <div class="cd-admin-user-avatar">AU</div>
+                    <span>Admin User</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="cd-admin-form-card">
+            <div class="cd-admin-form-grid">
+                <div>
+                    <div class="cd-admin-form-group">
+                        <label for="ProductName">Product Name</label>
+                        <input class="cd-admin-form-control" id="ProductName" type="text" placeholder="e.g. Hazelnut Latte" />
+                    </div>
+                    <div class="cd-admin-form-group">
+                        <label for="Category">Category</label>
+                        <select class="cd-admin-form-control" id="Category">
+                            <option>Beverages</option>
+                            <option>Bakery</option>
+                            <option>Hot Coffee</option>
+                            <option>Cold Coffee</option>
+                        </select>
+                    </div>
+                    <div class="cd-admin-form-group">
+                        <label for="Price">Price ($)</label>
+                        <input class="cd-admin-form-control" id="Price" type="text" placeholder="0.00" />
+                    </div>
+                    <div class="cd-admin-form-group">
+                        <label for="StockStatus">Stock Status</label>
+                        <select class="cd-admin-form-control" id="StockStatus">
+                            <option value="Active">In Stock</option>
+                            <option value="Out of Stock">Out of Stock</option>
+                        </select>
+                    </div>
+                    <div class="cd-admin-form-group">
+                        <label for="Description">Description</label>
+                        <textarea class="cd-admin-form-control" id="Description" placeholder="Enter product description..."></textarea>
+                    </div>
+                </div>
+                <div>
+                    <div class="cd-admin-form-group">
+                        <label>Product Image</label>
+                        <div id="imagePreviewBox" style="width:100%;height:160px;border-radius:10px;background:#f5ede4;border:2px dashed #d4b49a;display:flex;align-items:center;justify-content:center;margin-bottom:0.6rem;overflow:hidden;">
+                            <span id="imagePreviewPlaceholder" style="color:#b89880;font-size:0.85rem;">No image selected</span>
+                            <img id="imagePreviewImg" src="" alt="Preview" style="display:none;width:100%;height:100%;object-fit:cover;border-radius:8px;" />
+                        </div>
+
+                        <div style="display:flex;gap:0.5rem;align-items:center;margin-bottom:0.5rem;">
+                            <label for="ImageFile" class="cd-admin-btn-cancel" style="cursor:pointer;margin:0;padding:0.45rem 1rem;font-size:0.82rem;">
+                                📁 Choose File
+                            </label>
+                            <input type="file" id="ImageFile" accept="image/*" style="display:none;" />
+                            <span id="fileNameLabel" style="font-size:0.8rem;color:#888;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">No file chosen</span>
+                        </div>
+
+                        <label style="font-size:0.8rem;color:#888;display:block;margin-bottom:0.3rem;">— or paste image URL —</label>
+                        <input class="cd-admin-form-control" id="ImageUrl" type="text" placeholder="https://example.com/image.jpg" />
+                    </div>
+                </div>
+            </div>
+            <div class="cd-admin-form-actions">
+                <a asp-controller="Admin" asp-action="Index" class="cd-admin-btn-cancel">Cancel</a>
+                <button type="button" class="cd-admin-btn-save" id="saveNewProductBtn">Save Product</button>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+    (function () {
+        var STORAGE_KEY = 'cd_products_v1';
+
+        function loadProducts() {
+            try {
+                var raw = window.localStorage ? window.localStorage.getItem(STORAGE_KEY) : null;
+                if (!raw) return [];
+                var parsed = JSON.parse(raw);
+                return Array.isArray(parsed) ? parsed : [];
+            } catch (e) { return []; }
+        }
+
+        function saveProducts(products) {
+            try { window.localStorage.setItem(STORAGE_KEY, JSON.stringify(products || [])); } catch (e) {}
+        }
+
+        var nameEl    = document.getElementById('ProductName');
+        var catEl     = document.getElementById('Category');
+        var priceEl   = document.getElementById('Price');
+        var statusEl  = document.getElementById('StockStatus');
+        var descEl    = document.getElementById('Description');
+        var imageEl   = document.getElementById('ImageUrl');
+        var fileEl    = document.getElementById('ImageFile');
+        var fileLabel = document.getElementById('fileNameLabel');
+        var previewBox= document.getElementById('imagePreviewBox');
+        var previewImg= document.getElementById('imagePreviewImg');
+        var placeholder = document.getElementById('imagePreviewPlaceholder');
+        var btn       = document.getElementById('saveNewProductBtn');
+
+        var base64Image = '';
+
+        function showPreview(src) {
+            if (src) {
+                previewImg.src = src;
+                previewImg.style.display = 'block';
+                placeholder.style.display = 'none';
+            } else {
+                previewImg.style.display = 'none';
+                placeholder.style.display = 'block';
+            }
+        }
+
+        // File chosen
+        if (fileEl) {
+            fileEl.addEventListener('change', function () {
+                var file = fileEl.files && fileEl.files[0];
+                if (!file) return;
+                fileLabel.textContent = file.name;
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    base64Image = e.target.result;
+                    imageEl.value = '';           // clear URL field
+                    showPreview(base64Image);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // URL typed
+        if (imageEl) {
+            imageEl.addEventListener('input', function () {
+                var url = imageEl.value.trim();
+                if (url) {
+                    base64Image = '';             // clear file
+                    fileLabel.textContent = 'No file chosen';
+                    if (fileEl) fileEl.value = '';
+                    showPreview(url);
+                } else {
+                    showPreview('');
+                }
+            });
+        }
+
+        function redirectToAdmin() {
+            window.location.href = '@Url.Action("Index", "Admin")';
+        }
+
+        if (btn) {
+            btn.addEventListener('click', function () {
+                var name = (nameEl && nameEl.value ? nameEl.value : '').trim();
+                var category = (catEl && catEl.value ? catEl.value : '').trim();
+                var priceRaw = (priceEl && priceEl.value ? priceEl.value : '').toString().trim();
+                var status = (statusEl && statusEl.value ? statusEl.value : 'Active').toString().trim();
+                var description = (descEl && descEl.value ? descEl.value : '').trim();
+                var imageUrl = base64Image || (imageEl && imageEl.value ? imageEl.value.trim() : '');
+
+                if (!name) { alert('Enter product name'); return; }
+                if (!priceRaw) { alert('Enter product price'); return; }
+                var price = parseFloat(priceRaw);
+                if (isNaN(price)) { alert('Enter valid price'); return; }
+
+                var products = loadProducts();
+                var existing = products.find(function (p) { return p && p.name === name; });
+
+                if (existing) {
+                    existing.category = category;
+                    existing.price = price;
+                    existing.status = status;
+                    existing.deleted = false;
+                    existing.description = description;
+                    existing.image = imageUrl;
+                } else {
+                    products.push({
+                        id: 'p_' + Date.now(),
+                        name: name,
+                        category: category,
+                        price: price,
+                        status: status,
+                        deleted: false,
+                        description: description,
+                        image: imageUrl
+                    });
+                }
+
+                saveProducts(products);
+                redirectToAdmin();
+            });
+        }
+    })();
+</script>

@@ -1,0 +1,239 @@
+@{
+    ViewData["Title"] = "Add New User";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="cd-admin-layout">
+    <aside class="cd-admin-sidebar">
+        <div class="cd-admin-brand">
+            <div class="cd-admin-logo">CD</div>
+            <div>
+                <div class="cd-admin-brand-title">Cafe Delight</div>
+                <div class="cd-admin-brand-subtitle">Admin</div>
+            </div>
+        </div>
+        <nav class="cd-admin-nav">
+            <a asp-controller="Admin" asp-action="Dashboard" class="cd-admin-nav-item">
+                <span class="cd-admin-nav-icon">📊</span>
+                <span>Dashboard</span>
+            </a>
+            <a asp-controller="Admin" asp-action="Index" class="cd-admin-nav-item">
+                <span class="cd-admin-nav-icon">☕</span>
+                <span>Products</span>
+            </a>
+            <a asp-controller="Admin" asp-action="Users" class="cd-admin-nav-item is-active">
+                <span class="cd-admin-nav-icon">👥</span>
+                <span>Users</span>
+            </a>
+            <a asp-controller="Admin" asp-action="Orders" class="cd-admin-nav-item">
+                <span class="cd-admin-nav-icon">🧾</span>
+                <span>Orders</span>
+            </a>
+            <a asp-controller="Admin" asp-action="Settings" class="cd-admin-nav-item">
+                <span class="cd-admin-nav-icon">⚙️</span>
+                <span>Settings</span>
+            </a>
+        </nav>
+    </aside>
+
+    <section class="cd-admin-main" style="background: #fffdfb;">
+        <header class="cd-admin-topbar" style="border-bottom: 1px solid #f1e2d4;">
+            <div>
+                <h1 class="cd-admin-page-title" style="font-size: 1.1rem; color: #3b2418;">Add New User</h1>
+            </div>
+            <div class="cd-admin-topbar-right">
+                <div class="cd-admin-user-chip">
+                    <div class="cd-admin-user-avatar">AU</div>
+                    <span style="font-weight: 600; font-size: 0.85rem;">Admin User</span>
+                </div>
+            </div>
+        </header>
+
+        <div style="padding: 2.5rem 3rem;">
+            <a asp-controller="Admin" asp-action="Users" style="display:inline-flex; align-items:center; color:#958474; text-decoration:none; font-size: 0.85rem; font-weight: 600; margin-bottom: 1.5rem;">
+                <span style="margin-right:0.6rem; font-size: 1rem;">&#8592;</span> Back to Users
+            </a>
+
+            <div class="cd-adduser-card">
+                <h2 style="font-size: 1.15rem; font-weight: 700; color: #3b2418; margin: 0 0 0.3rem;">User Details</h2>
+                <p style="font-size: 0.85rem; color: #958474; margin-bottom: 2rem;">Fill in the information below to create a new user account.</p>
+
+                <form id="addUserForm" onsubmit="handleSaveUser(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>First Name</label>
+                            <input type="text" id="firstName" required />
+                        </div>
+                        <div class="form-group">
+                            <label>Last Name</label>
+                            <input type="text" id="lastName" required />
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group" style="flex: 100%;">
+                            <label>Email Address</label>
+                            <input type="email" id="email" required />
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Role</label>
+                            <select id="role">
+                                <option>Customer</option>
+                                <option>Admin</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Status</label>
+                            <select id="status">
+                                <option>Active</option>
+                                <option>Blocked</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" id="password" required />
+                        </div>
+                        <div class="form-group">
+                            <label>Confirm Password</label>
+                            <input type="password" id="confirmPassword" required />
+                        </div>
+                    </div>
+
+                    <div class="form-actions-divider">
+                        <a asp-controller="Admin" asp-action="Users" class="btn-cancel">Cancel</a>
+                        <button type="submit" class="btn-create">Create User</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</div>
+
+<style>
+    .cd-admin-main {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+    }
+    .cd-adduser-card {
+        background: #fff;
+        border: 1px solid #f9f2ed;
+        border-radius: 8px;
+        padding: 2.25rem;
+        max-width: 720px;
+        margin: 0 auto;
+        box-shadow: 0 6px 20px rgba(59, 36, 24, 0.04);
+    }
+    .form-row {
+        display: flex;
+        gap: 2rem;
+        margin-bottom: 1.5rem;
+    }
+    .form-group {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+    .form-group label {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #5b4636;
+        margin-bottom: 0.5rem;
+    }
+    .form-group input, .form-group select {
+        padding: 0.75rem 1rem;
+        border: none;
+        background: #fcf6f0;
+        border-radius: 6px;
+        font-size: 0.9rem;
+        color: #3b2418;
+        outline: 1px solid transparent;
+        transition: all 0.2s;
+    }
+    .form-group input:focus, .form-group select:focus {
+        outline: 1px solid #c8a38b;
+        background: #fff;
+        box-shadow: 0 0 0 3px rgba(200, 163, 139, 0.15);
+    }
+    .form-actions-divider {
+        margin-top: 2.5rem;
+        padding-top: 1.5rem;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 1rem;
+    }
+    .btn-cancel {
+        padding: 0.6rem 1.6rem;
+        border: 1px solid #eadecd;
+        border-radius: 6px;
+        background: #fff;
+        color: #5b4636;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-cancel:hover {
+        background: #fbf5f0;
+    }
+    .btn-create {
+        padding: 0.65rem 1.6rem;
+        border: none;
+        border-radius: 6px;
+        background: #5b3925;
+        color: #fff;
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-create:hover {
+        background: #462a19;
+    }
+</style>
+
+<script>
+    function handleSaveUser(e) {
+        e.preventDefault();
+        
+        var fName = document.getElementById('firstName').value.trim();
+        var lName = document.getElementById('lastName').value.trim();
+        var email = document.getElementById('email').value.trim();
+        var status = document.getElementById('status').value;
+        var p1 = document.getElementById('password').value;
+        var p2 = document.getElementById('confirmPassword').value;
+
+        if (p1 !== p2) {
+            alert('Passwords do not match.');
+            return;
+        }
+
+        var STORAGE_KEY = 'cd_admin_users_v1';
+        var users = [];
+        try {
+            var raw = localStorage.getItem(STORAGE_KEY);
+            if (raw) Object.assign(users, JSON.parse(raw));
+            if (!Array.isArray(users)) users = [];
+        } catch(ex) {}
+
+        users.push({
+            id: 'u_' + Date.now(),
+            name: fName + ' ' + lName,
+            email: email,
+            status: status,
+            deleted: false
+        });
+
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(users));
+
+        window.location.href = '/Admin/Users';
+    }
+</script>

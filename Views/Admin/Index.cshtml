@@ -1,0 +1,644 @@
+@{
+    ViewData["Title"] = "Admin Panel";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+<div class="cd-admin-layout">
+    <aside class="cd-admin-sidebar">
+        <div class="cd-admin-brand">
+            <div class="cd-admin-logo">CD</div>
+            <div>
+                <div class="cd-admin-brand-title">Cafe Delight</div>
+                <div class="cd-admin-brand-subtitle">Admin</div>
+            </div>
+        </div>
+        <nav class="cd-admin-nav">
+            <a asp-controller="Admin" asp-action="Dashboard" class="cd-admin-nav-item">
+                <span class="cd-admin-nav-icon">📊</span>
+                <span>Dashboard</span>
+            </a>
+            <a asp-controller="Admin" asp-action="Index" class="cd-admin-nav-item is-active">
+                <span class="cd-admin-nav-icon">☕</span>
+                <span>Products</span>
+            </a>
+            <a asp-controller="Admin" asp-action="Users" class="cd-admin-nav-item">
+                <span class="cd-admin-nav-icon">👥</span>
+                <span>Users</span>
+            </a>
+            <a asp-controller="Admin" asp-action="Orders" class="cd-admin-nav-item">
+                <span class="cd-admin-nav-icon">🧾</span>
+                <span>Orders</span>
+            </a>
+            <a asp-controller="Admin" asp-action="Settings" class="cd-admin-nav-item">
+                <span class="cd-admin-nav-icon">⚙️</span>
+                <span>Settings</span>
+            </a>
+        </nav>
+    </aside>
+
+    <section class="cd-admin-main">
+        <header class="cd-admin-topbar">
+            <div>
+                <h1 class="cd-admin-page-title">Manage Products</h1>
+                <p class="cd-admin-page-subtitle">View and manage all cafe products.</p>
+            </div>
+            <div class="cd-admin-topbar-right">
+                <div class="cd-admin-user-chip">
+                    <div class="cd-admin-user-avatar">AU</div>
+                    <span>Admin User</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="cd-admin-toolbar">
+            <div class="cd-admin-search">
+                <span class="cd-admin-search-icon">🔍</span>
+                <input id="productSearchInput" type="text" placeholder="Search products..." />
+            </div>
+            <div class="cd-admin-toolbar-actions">
+                <button class="cd-admin-secondary-btn" type="button">
+                    ⛃ Filter
+                </button>
+                <a asp-controller="Admin" asp-action="AddProduct" class="cd-admin-primary-btn">
+                    + Add Product
+                </a>
+            </div>
+        </div>
+
+        <div class="cd-admin-table-card">
+            <div class="cd-admin-table-header-row">
+                <span>Product</span>
+                <span>Price</span>
+                <span>Status</span>
+                <span class="cd-admin-table-actions-col">Actions</span>
+            </div>
+
+            <div class="cd-admin-table-row cd-admin-product-row" data-product-id="1" data-product-name="Cappuccino" data-product-meta="Hot Coffee" data-product-price="180.00" data-product-status="Active">
+                <div class="cd-admin-product-cell">
+                    <div class="cd-admin-product-thumb"></div>
+                    <div>
+                        <div class="cd-admin-product-name">Cappuccino</div>
+                        <div class="cd-admin-product-meta">Hot Coffee</div>
+                    </div>
+                </div>
+                <div class="cd-admin-table-text">₹180.00</div>
+                <div class="cd-admin-table-text">
+                    <span class="cd-admin-status-pill is-active">Active</span>
+                </div>
+                <div class="cd-admin-table-actions">
+                    <button type="button" class="cd-admin-icon-btn cd-admin-edit-product-btn" title="Edit">✏️</button>
+                    <button type="button" class="cd-admin-icon-btn cd-admin-delete-product-btn" title="Delete">🗑</button>
+                </div>
+            </div>
+
+            <div class="cd-admin-table-row cd-admin-product-row" data-product-id="2" data-product-name="Butter Croissant" data-product-meta="Bakery" data-product-price="120.00" data-product-status="Active">
+                <div class="cd-admin-product-cell">
+                    <div class="cd-admin-product-thumb"></div>
+                    <div>
+                        <div class="cd-admin-product-name">Butter Croissant</div>
+                        <div class="cd-admin-product-meta">Bakery</div>
+                    </div>
+                </div>
+                <div class="cd-admin-table-text">₹120.00</div>
+                <div class="cd-admin-table-text">
+                    <span class="cd-admin-status-pill is-active">Active</span>
+                </div>
+                <div class="cd-admin-table-actions">
+                    <button type="button" class="cd-admin-icon-btn cd-admin-edit-product-btn" title="Edit">✏️</button>
+                    <button type="button" class="cd-admin-icon-btn cd-admin-delete-product-btn" title="Delete">🗑</button>
+                </div>
+            </div>
+
+            <div class="cd-admin-table-row cd-admin-product-row" data-product-id="3" data-product-name="Iced Mocha" data-product-meta="Cold Coffee" data-product-price="240.00" data-product-status="Active">
+                <div class="cd-admin-product-cell">
+                    <div class="cd-admin-product-thumb"></div>
+                    <div>
+                        <div class="cd-admin-product-name">Iced Mocha</div>
+                        <div class="cd-admin-product-meta">Cold Coffee</div>
+                    </div>
+                </div>
+                <div class="cd-admin-table-text">₹240.00</div>
+                <div class="cd-admin-table-text">
+                    <span class="cd-admin-status-pill is-active">Active</span>
+                </div>
+                <div class="cd-admin-table-actions">
+                    <button type="button" class="cd-admin-icon-btn cd-admin-edit-product-btn" title="Edit">✏️</button>
+                    <button type="button" class="cd-admin-icon-btn cd-admin-delete-product-btn" title="Delete">🗑</button>
+                </div>
+            </div>
+
+            <div class="cd-admin-table-row cd-admin-product-row" data-product-id="4" data-product-name="Chocolate Muffin" data-product-meta="Bakery" data-product-price="170.00" data-product-status="Active">
+                <div class="cd-admin-product-cell">
+                    <div class="cd-admin-product-thumb"></div>
+                    <div>
+                        <div class="cd-admin-product-name">Chocolate Muffin</div>
+                        <div class="cd-admin-product-meta">Bakery</div>
+                    </div>
+                </div>
+                <div class="cd-admin-table-text">₹170.00</div>
+                <div class="cd-admin-table-text">
+                    <span class="cd-admin-status-pill is-active">Active</span>
+                </div>
+                <div class="cd-admin-table-actions">
+                    <button type="button" class="cd-admin-icon-btn cd-admin-edit-product-btn" title="Edit">✏️</button>
+                    <button type="button" class="cd-admin-icon-btn cd-admin-delete-product-btn" title="Delete">🗑</button>
+                </div>
+            </div>
+
+            <div class="cd-admin-table-row cd-admin-product-row" data-product-id="5" data-product-name="Double Espresso" data-product-meta="Hot Coffee" data-product-price="140.00" data-product-status="Active">
+                <div class="cd-admin-product-cell">
+                    <div class="cd-admin-product-thumb"></div>
+                    <div>
+                        <div class="cd-admin-product-name">Double Espresso</div>
+                        <div class="cd-admin-product-meta">Hot Coffee</div>
+                    </div>
+                </div>
+                <div class="cd-admin-table-text">₹140.00</div>
+                <div class="cd-admin-table-text">
+                    <span class="cd-admin-status-pill is-active">Active</span>
+                </div>
+                <div class="cd-admin-table-actions">
+                    <button type="button" class="cd-admin-icon-btn cd-admin-edit-product-btn" title="Edit">✏️</button>
+                    <button type="button" class="cd-admin-icon-btn cd-admin-delete-product-btn" title="Delete">🗑</button>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Edit Product Modal (UI only) -->
+<div id="editProductModalOverlay" class="cd-admin-edit-overlay" style="display:none;">
+    <div class="cd-admin-edit-modal" role="dialog" aria-modal="true" aria-labelledby="editProductModalTitle">
+        <button type="button" class="cd-admin-edit-close" id="editProductModalCloseBtn">&times;</button>
+        <h2 id="editProductModalTitle" class="cd-admin-edit-title">Edit Product</h2>
+
+        <div class="cd-admin-edit-body">
+            <div class="cd-admin-form-group">
+                <label for="editProductName">Product Name</label>
+                <input id="editProductName" class="cd-admin-form-control" type="text" readonly />
+            </div>
+
+            <div class="cd-admin-form-group">
+                <label for="editProductCategory">Category</label>
+                <input id="editProductCategory" class="cd-admin-form-control" type="text" />
+            </div>
+
+            <div class="cd-admin-edit-grid">
+                <div class="cd-admin-form-group">
+                    <label for="editProductPrice">Price</label>
+                    <input id="editProductPrice" class="cd-admin-form-control" type="text" />
+                </div>
+
+                <div class="cd-admin-form-group">
+                    <label for="editProductStatus">Stock Status</label>
+                    <select id="editProductStatus" class="cd-admin-form-control">
+                        <option value="Active">Active</option>
+                        <option value="Out of Stock">Out of Stock</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="cd-admin-form-group" style="margin-top:0.75rem;">
+                <label>Product Image</label>
+                <div id="editImagePreviewBox" style="width:100%;height:110px;border-radius:8px;background:#f5ede4;border:2px dashed #d4b49a;display:flex;align-items:center;justify-content:center;margin-bottom:0.5rem;overflow:hidden;">
+                    <span id="editImagePlaceholder" style="color:#b89880;font-size:0.82rem;">No image</span>
+                    <img id="editImagePreviewImg" src="" alt="" style="display:none;width:100%;height:100%;object-fit:cover;border-radius:6px;" />
+                </div>
+                <div style="display:flex;gap:0.4rem;align-items:center;margin-bottom:0.4rem;">
+                    <label for="editImageFile" class="cd-admin-btn-cancel" style="cursor:pointer;margin:0;padding:0.35rem 0.8rem;font-size:0.78rem;">
+                        📁 Choose File
+                    </label>
+                    <input type="file" id="editImageFile" accept="image/*" style="display:none;" />
+                    <span id="editFileLabel" style="font-size:0.78rem;color:#888;flex:1;">No file chosen</span>
+                </div>
+                <label style="font-size:0.78rem;color:#888;display:block;margin-bottom:0.3rem;">— or paste image URL —</label>
+                <input id="editProductImageUrl" class="cd-admin-form-control" type="text" placeholder="https://example.com/image.jpg" />
+            </div>
+
+            <div class="cd-admin-form-actions cd-admin-edit-actions">
+                <button type="button" class="cd-admin-btn-cancel" id="editProductCancelBtn">Cancel</button>
+                <button type="button" class="cd-admin-btn-save" id="editProductSaveBtn">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .cd-admin-edit-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.35);
+        backdrop-filter: blur(4px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        padding: 1rem;
+    }
+
+    .cd-admin-edit-modal {
+        width: 100%;
+        max-width: 520px;
+        background: #fff;
+        border: 1px solid #f1e2d4;
+        border-radius: 18px;
+        box-shadow: 0 24px 60px rgba(15, 23, 42, 0.18);
+        padding: 1.25rem 1.4rem 1.3rem;
+        position: relative;
+    }
+
+    .cd-admin-edit-close {
+        position: absolute;
+        top: 0.9rem;
+        right: 1rem;
+        border: none;
+        background: transparent;
+        font-size: 1.6rem;
+        cursor: pointer;
+        color: #a59a8c;
+    }
+
+    .cd-admin-edit-title {
+        margin: 0 0 1rem;
+        font-size: 1.15rem;
+        font-weight: 650;
+        color: #3b2418;
+    }
+
+    .cd-admin-edit-body {
+        padding-top: 0.2rem;
+    }
+
+    .cd-admin-edit-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+    }
+
+    @@media (max-width: 520px) {
+        .cd-admin-edit-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    /* reuse classes from admin-panel.css */
+    .cd-admin-edit-actions {
+        margin-top: 1.25rem;
+        padding-top: 1rem;
+        border-top: 1px solid #f1e2d4;
+    }
+</style>
+
+<script>
+    (function () {
+        var overlay = document.getElementById('editProductModalOverlay');
+        var closeBtn = document.getElementById('editProductModalCloseBtn');
+        var cancelBtn = document.getElementById('editProductCancelBtn');
+        var saveBtn = document.getElementById('editProductSaveBtn');
+        var searchInput = document.getElementById('productSearchInput');
+
+        var editName = document.getElementById('editProductName');
+        var editCategory = document.getElementById('editProductCategory');
+        var editPrice = document.getElementById('editProductPrice');
+        var editStatus = document.getElementById('editProductStatus');
+        var editImageUrl = document.getElementById('editProductImageUrl');
+        var editImageFile = document.getElementById('editImageFile');
+        var editFileLabel = document.getElementById('editFileLabel');
+        var editPreviewImg = document.getElementById('editImagePreviewImg');
+        var editPlaceholder = document.getElementById('editImagePlaceholder');
+        var editBase64 = '';
+
+        function showEditPreview(src) {
+            if (src && editPreviewImg) {
+                editPreviewImg.src = src;
+                editPreviewImg.style.display = 'block';
+                if (editPlaceholder) editPlaceholder.style.display = 'none';
+            } else if (editPreviewImg) {
+                editPreviewImg.style.display = 'none';
+                if (editPlaceholder) editPlaceholder.style.display = 'block';
+            }
+        }
+
+        if (editImageFile) {
+            editImageFile.addEventListener('change', function () {
+                var file = editImageFile.files && editImageFile.files[0];
+                if (!file) return;
+                if (editFileLabel) editFileLabel.textContent = file.name;
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    editBase64 = e.target.result;
+                    if (editImageUrl) editImageUrl.value = '';
+                    showEditPreview(editBase64);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        if (editImageUrl) {
+            editImageUrl.addEventListener('input', function () {
+                var url = editImageUrl.value.trim();
+                if (url) {
+                    editBase64 = '';
+                    if (editFileLabel) editFileLabel.textContent = 'No file chosen';
+                    if (editImageFile) editImageFile.value = '';
+                    showEditPreview(url);
+                } else {
+                    showEditPreview('');
+                }
+            });
+        }
+
+        var activeRow = null;
+
+        // Keep admin edits in localStorage so they can show on Home/Menu pages (UI only).
+        var STORAGE_KEY = 'cd_products_v1';
+        var productsCache = [];
+
+        function loadProducts() {
+            try {
+                var raw = window.localStorage ? window.localStorage.getItem(STORAGE_KEY) : null;
+                if (!raw) return [];
+                var parsed = JSON.parse(raw);
+                return Array.isArray(parsed) ? parsed : [];
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function saveProducts(products) {
+            try {
+                window.localStorage.setItem(STORAGE_KEY, JSON.stringify(products || []));
+            } catch (e) {
+                // Ignore localStorage failures.
+            }
+        }
+
+        function seedProductsFromDom() {
+            var seeded = [];
+            var rows = document.querySelectorAll('.cd-admin-product-row');
+
+            rows.forEach(function (row) {
+                seeded.push({
+                    id: row.dataset.productId || '',
+                    name: row.dataset.productName || '',
+                    category: row.dataset.productMeta || '',
+                    price: row.dataset.productPrice || '',
+                    status: row.dataset.productStatus || '',
+                    deleted: false
+                });
+            });
+
+            return seeded;
+        }
+
+        function findProductByRow(row) {
+            if (!row) return null;
+            var id = row.dataset.productId;
+            var name = row.dataset.productName;
+            return productsCache.find(function (p) {
+                return (id && p.id && p.id === id) || (name && p.name === name);
+            }) || null;
+        }
+
+        (function initAdminStorage() {
+            productsCache = loadProducts();
+
+            // Seed only admin-table products (so Home/Menu items not in admin list stay unchanged).
+            if (!productsCache || productsCache.length === 0) {
+                productsCache = seedProductsFromDom();
+                saveProducts(productsCache);
+            } else {
+                // Ensure every admin-table product exists in the cache.
+                var seeded = seedProductsFromDom();
+                seeded.forEach(function (s) {
+                    var exists = productsCache.find(function (p) {
+                        return (s.id && p.id && p.id === s.id) || (s.name && p.name === s.name);
+                    });
+                    if (!exists) {
+                        productsCache.push(s);
+                    } else {
+                        // Keep the deleted flag, but refresh the latest table values.
+                        var deleted = !!exists.deleted;
+                        exists.id = s.id;
+                        exists.name = s.name;
+                        exists.category = s.category;
+                        exists.price = s.price;
+                        exists.status = s.status;
+                        exists.deleted = deleted;
+                    }
+                });
+                saveProducts(productsCache);
+            }
+
+            // Hide rows that are marked deleted.
+            var allRows = document.querySelectorAll('.cd-admin-product-row');
+            allRows.forEach(function (row) {
+                var prod = findProductByRow(row);
+                if (prod && prod.deleted) {
+                    if (row.parentElement) row.parentElement.removeChild(row);
+                } else if (prod) {
+                    // Apply cached values back to the row so refresh keeps edits.
+                    if (prod.name) row.dataset.productName = prod.name;
+                    if (prod.category !== undefined) row.dataset.productMeta = prod.category;
+                    if (prod.price !== undefined) row.dataset.productPrice = prod.price;
+                    if (prod.status) row.dataset.productStatus = prod.status;
+
+                    var nameEl = row.querySelector('.cd-admin-product-name');
+                    if (nameEl && prod.name) nameEl.textContent = prod.name;
+
+                    var metaEl = row.querySelector('.cd-admin-product-meta');
+                    if (metaEl && prod.category !== undefined) metaEl.textContent = prod.category;
+
+                    var textEls = row.querySelectorAll('.cd-admin-table-text');
+                    if (textEls && textEls.length > 0 && prod.price !== undefined) {
+                        textEls[0].textContent = '₹' + prod.price;
+                    }
+
+                    // Show product image in the thumbnail column
+                    var thumbEl = row.querySelector('.cd-admin-product-thumb');
+                    if (thumbEl && prod.image) {
+                        thumbEl.style.backgroundImage = 'url("' + prod.image + '")';
+                        thumbEl.style.backgroundSize = 'cover';
+                        thumbEl.style.backgroundPosition = 'center';
+                        thumbEl.style.borderRadius = '6px';
+                        thumbEl.style.width = '44px';
+                        thumbEl.style.height = '44px';
+                        thumbEl.style.minWidth = '44px';
+                    }
+
+                    setPillForStatus(row, prod.status || 'Active');
+                }
+            });
+        })();
+
+        function showOverlay() {
+            if (!overlay) return;
+            overlay.style.display = 'flex';
+        }
+
+        function hideOverlay() {
+            if (!overlay) return;
+            overlay.style.display = 'none';
+            activeRow = null;
+        }
+
+        function setPillForStatus(row, statusValue) {
+            // statusValue: "Active" | "Out of Stock"
+            var pill = row.querySelector('.cd-admin-status-pill');
+            if (!pill) return;
+
+            pill.classList.remove('is-active');
+            pill.classList.remove('is-out');
+
+            if (statusValue === 'Active') {
+                pill.classList.add('is-active');
+                pill.textContent = 'Active';
+            } else {
+                pill.classList.add('is-out');
+                pill.textContent = 'Out of Stock';
+            }
+        }
+
+        function fillModalFromRow(row) {
+            editName.value = row.dataset.productName || '';
+            editCategory.value = row.dataset.productMeta || '';
+            editPrice.value = row.dataset.productPrice || '';
+            editStatus.value = row.dataset.productStatus || 'Active';
+            // Load current image from cache
+            editBase64 = '';
+            if (editFileLabel) editFileLabel.textContent = 'No file chosen';
+            if (editImageFile) editImageFile.value = '';
+            var prod = findProductByRow(row);
+            var currentImage = prod && prod.image ? prod.image : '';
+            if (editImageUrl) editImageUrl.value = currentImage;
+            showEditPreview(currentImage);
+        }
+
+        function updateRowFromModal() {
+            if (!activeRow) return;
+
+            var name = (editName.value || '').trim();
+            var category = (editCategory.value || '').trim();
+            var price = (editPrice.value || '').trim();
+            var status = editStatus.value || 'Active';
+            var image = editBase64 || (editImageUrl ? editImageUrl.value.trim() : '');
+
+            activeRow.dataset.productName = name;
+            activeRow.dataset.productMeta = category;
+            activeRow.dataset.productPrice = price;
+            activeRow.dataset.productStatus = status;
+
+            // Name + category
+            var nameEl = activeRow.querySelector('.cd-admin-product-name');
+            if (nameEl) nameEl.textContent = name;
+
+            var metaEl = activeRow.querySelector('.cd-admin-product-meta');
+            if (metaEl) metaEl.textContent = category;
+
+            // Price (first .cd-admin-table-text inside the row)
+            var textEls = activeRow.querySelectorAll('.cd-admin-table-text');
+            if (textEls && textEls.length > 0) {
+                textEls[0].textContent = '\u20B9' + price;
+            }
+
+            setPillForStatus(activeRow, status);
+
+            // Update thumbnail with new image
+            if (image) {
+                var thumbEl = activeRow.querySelector('.cd-admin-product-thumb');
+                if (thumbEl) {
+                    thumbEl.style.backgroundImage = 'url("' + image + '")';
+                    thumbEl.style.backgroundSize = 'cover';
+                    thumbEl.style.backgroundPosition = 'center';
+                    thumbEl.style.borderRadius = '6px';
+                    thumbEl.style.width = '44px';
+                    thumbEl.style.height = '44px';
+                    thumbEl.style.minWidth = '44px';
+                }
+            }
+
+            // Persist changes in localStorage cache.
+            var prod = findProductByRow(activeRow);
+            if (prod) {
+                prod.name = name;
+                prod.category = category;
+                prod.price = price;
+                prod.status = status;
+                if (image) prod.image = image;
+                prod.deleted = false;
+            }
+        }
+
+        if (saveBtn) {
+            saveBtn.addEventListener('click', function () {
+                updateRowFromModal();
+                saveProducts(productsCache);
+                hideOverlay();
+            });
+        }
+
+        if (closeBtn) {
+            closeBtn.addEventListener('click', hideOverlay);
+        }
+
+        if (cancelBtn) {
+            cancelBtn.addEventListener('click', hideOverlay);
+        }
+
+        if (overlay) {
+            overlay.addEventListener('click', function (e) {
+                if (e.target === overlay) hideOverlay();
+            });
+        }
+
+        // Search
+        if (searchInput) {
+            searchInput.addEventListener('input', function () {
+                var q = (searchInput.value || '').toLowerCase().trim();
+                var rows = document.querySelectorAll('.cd-admin-product-row');
+
+                rows.forEach(function (row) {
+                    var name = (row.dataset.productName || '').toLowerCase();
+                    var meta = (row.dataset.productMeta || '').toLowerCase();
+                    var status = (row.dataset.productStatus || '').toLowerCase();
+
+                    var matches = !q || (name + ' ' + meta + ' ' + status).indexOf(q) !== -1;
+                    row.style.display = matches ? '' : 'none';
+                });
+            });
+        }
+
+        // Edit + Delete
+        var editButtons = document.querySelectorAll('.cd-admin-edit-product-btn');
+        editButtons.forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var row = btn.closest('.cd-admin-product-row');
+                if (!row) return;
+                activeRow = row;
+                fillModalFromRow(row);
+                showOverlay();
+            });
+        });
+
+        var deleteButtons = document.querySelectorAll('.cd-admin-delete-product-btn');
+        deleteButtons.forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var row = btn.closest('.cd-admin-product-row');
+                if (!row) return;
+
+                var name = row.dataset.productName || 'this product';
+                var ok = confirm('Delete "' + name + '" permanently?');
+                if (!ok) return;
+
+                var prod = findProductByRow(row);
+                if (prod) {
+                    prod.deleted = true;
+                    saveProducts(productsCache);
+                }
+
+                if (row.parentElement) row.parentElement.removeChild(row);
+            });
+        });
+    })();
+</script>

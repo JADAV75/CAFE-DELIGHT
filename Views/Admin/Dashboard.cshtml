@@ -1,0 +1,225 @@
+@{
+    ViewData["Title"] = "Admin Dashboard";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section Styles {
+    <style>
+        .cd-admin-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .cd-admin-stat-card {
+            background: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            position: relative;
+        }
+        .cd-admin-stat-title {
+            color: #888;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        .cd-admin-stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #222;
+            margin-bottom: 5px;
+        }
+        .cd-admin-stat-subtitle {
+            font-size: 12px;
+            color: #28a745;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+        .cd-admin-stat-icon {
+            position: absolute;
+            top: 20px; right: 20px;
+            background: #f5f0eb;
+            width: 36px; height: 36px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 8px;
+            color: #6C4A3A;
+            font-size: 16px;
+        }
+        .cd-admin-table-card {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            overflow: hidden;
+            border: 1px solid #f0f0f0;
+        }
+        .cd-admin-recent-orders-title {
+            padding: 20px 0 15px 0;
+            font-size: 16px;
+            font-weight: 700;
+            margin: 0;
+            color: #333;
+        }
+    </style>
+}
+
+<div class="cd-admin-layout">
+    <aside class="cd-admin-sidebar">
+        <div class="cd-admin-brand">
+            <div class="cd-admin-logo">CD</div>
+            <div>
+                <div class="cd-admin-brand-title">Cafe Delight</div>
+                <div class="cd-admin-brand-subtitle">Admin</div>
+            </div>
+        </div>
+        <nav class="cd-admin-nav">
+            <a asp-controller="Admin" asp-action="Dashboard" class="cd-admin-nav-item is-active">
+                <span class="cd-admin-nav-icon">📊</span>
+                <span>Dashboard</span>
+            </a>
+            <a asp-controller="Admin" asp-action="Index" class="cd-admin-nav-item">
+                <span class="cd-admin-nav-icon">☕</span>
+                <span>Products</span>
+            </a>
+            <a asp-controller="Admin" asp-action="Users" class="cd-admin-nav-item">
+                <span class="cd-admin-nav-icon">👥</span>
+                <span>Users</span>
+            </a>
+            <a asp-controller="Admin" asp-action="Orders" class="cd-admin-nav-item">
+                <span class="cd-admin-nav-icon">🧾</span>
+                <span>Orders</span>
+            </a>
+            <a asp-controller="Admin" asp-action="Settings" class="cd-admin-nav-item">
+                <span class="cd-admin-nav-icon">⚙️</span>
+                <span>Settings</span>
+            </a>
+        </nav>
+    </aside>
+
+    <section class="cd-admin-main">
+        <header class="cd-admin-topbar">
+            <div>
+                <h1 class="cd-admin-page-title">Overview</h1>
+            </div>
+            <div class="cd-admin-topbar-right">
+                <div class="cd-admin-user-chip">
+                    <div class="cd-admin-user-avatar">AU</div>
+                    <span>Admin User</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="cd-admin-stats-grid">
+            <div class="cd-admin-stat-card">
+                <div class="cd-admin-stat-icon">₹</div>
+                <div class="cd-admin-stat-title">Total Revenue</div>
+                <div class="cd-admin-stat-value" id="totalRevenue">₹1,780</div>
+           
+            </div>
+            <div class="cd-admin-stat-card">
+                <div class="cd-admin-stat-icon">🛒</div>
+                <div class="cd-admin-stat-title">Total Orders</div>
+                <div class="cd-admin-stat-value" id="totalOrders">4</div>
+              
+            </div>
+            <div class="cd-admin-stat-card">
+                <div class="cd-admin-stat-icon">📦</div>
+                <div class="cd-admin-stat-title">Total Products</div>
+                <div class="cd-admin-stat-value" id="totalProducts">0</div>
+                <div class="cd-admin-stat-subtitle" style="color: #888; font-weight: normal;">Live count</div>
+            </div>
+            <div class="cd-admin-stat-card">
+                <div class="cd-admin-stat-icon">👥</div>
+                <div class="cd-admin-stat-title">Total Users</div>
+                <div class="cd-admin-stat-value" id="totalUsers">0</div>
+              
+            </div>
+        </div>
+
+        <script>
+            (function () {
+                // Products
+                var rawProducts = window.localStorage ? window.localStorage.getItem('cd_products_v1') : null;
+                var products = rawProducts ? JSON.parse(rawProducts) : [];
+                var activeProducts = Array.isArray(products) ? products.filter(function(p) { return !p.deleted; }).length : 5;
+                var totalProductsEl = document.getElementById('totalProducts');
+                if (totalProductsEl) totalProductsEl.textContent = activeProducts;
+
+                // Users
+                var rawUsers = window.localStorage ? window.localStorage.getItem('cd_admin_users_v1') : null;
+                var users = rawUsers ? JSON.parse(rawUsers) : [];
+                var activeUsers = Array.isArray(users) ? users.filter(function(u) { return !u.deleted; }).length : 3;
+                var totalUsersEl = document.getElementById('totalUsers');
+                if (totalUsersEl) totalUsersEl.textContent = activeUsers;
+
+                // Orders — read from localStorage
+                var rawOrders = window.localStorage ? window.localStorage.getItem('cd_orders_v1') : null;
+                var orders = (rawOrders ? JSON.parse(rawOrders) : null) || [];
+                if (!Array.isArray(orders)) orders = [];
+
+                var totalOrdersEl = document.getElementById('totalOrders');
+                if (totalOrdersEl) totalOrdersEl.textContent = orders.length;
+
+                // Revenue — sum numeric part of total field
+                var revenue = orders.reduce(function(sum, o) {
+                    var num = parseFloat((o.total || '').toString().replace(/[^\d.]/g, '')) || 0;
+                    return sum + num;
+                }, 0);
+                var totalRevenueEl = document.getElementById('totalRevenue');
+                if (totalRevenueEl) totalRevenueEl.textContent = '\u20b9' + Math.round(revenue).toLocaleString('en-IN');
+            })();
+        </script>
+
+        <h3 class="cd-admin-recent-orders-title">Recent Orders</h3>
+        <div class="cd-admin-table-card">
+            <div style="display:grid;grid-template-columns:2fr 3fr 1fr 1fr;padding:0.55rem 1.3rem;font-size:0.8rem;font-weight:600;color:#9b8574;border-bottom:1px solid #f7ece0;column-gap:1rem;min-width:600px;">
+                <span>Order ID / Customer</span>
+                <span>Items</span>
+                <span>Amount</span>
+                <span>Status</span>
+            </div>
+            <div id="dashRecentOrdersBody" style="min-width:600px;overflow-x:auto;">
+                <!-- Rendered by JS -->
+            </div>
+        </div>
+
+        <script>
+            (function () {
+                var rawOrders = window.localStorage ? window.localStorage.getItem('cd_orders_v1') : null;
+                var orders = rawOrders ? JSON.parse(rawOrders) : [];
+                if (!Array.isArray(orders)) orders = [];
+
+                var body = document.getElementById('dashRecentOrdersBody');
+                if (!body) return;
+
+                var recent = orders.slice(-5).reverse(); // last 5, newest first
+                if (recent.length === 0) {
+                    body.innerHTML = '<div style="padding:1.5rem;text-align:center;color:#b89880;font-size:0.9rem;">No orders yet.</div>';
+                    return;
+                }
+
+                recent.forEach(function (o, i) {
+                    var isCompleted = (o.status || '').toLowerCase() === 'completed';
+                    var stStyle = isCompleted
+                        ? 'background:#e6f4ea;color:#1e8e3e;'
+                        : 'background:#fff3e0;color:#e65100;';
+                    var borderBottom = i < recent.length - 1 ? 'border-bottom:1px solid #f7ece0;' : '';
+                    var row = document.createElement('div');
+                    row.style.cssText = 'display:grid;grid-template-columns:2fr 3fr 1fr 1fr;padding:0.7rem 1.3rem;font-size:0.85rem;column-gap:1rem;align-items:center;' + borderBottom;
+                    row.innerHTML =
+                        '<div>' +
+                            '<div style="font-weight:600;color:#3b2418;">' + (o.id || '') + '</div>' +
+                            '<div style="font-size:0.75rem;color:#9e8a78;margin-top:2px;">' + (o.customer || '') + '</div>' +
+                        '</div>' +
+                        '<div style="color:#555;font-size:0.82rem;">' + (o.items || '') + '</div>' +
+                        '<div style="font-weight:600;">' + (o.total || '') + '</div>' +
+                        '<div><span style="display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;' + stStyle + '">' + (o.status || '') + '</span></div>';
+                    body.appendChild(row);
+                });
+            })();
+        </script>
+    </section>
+</div>
