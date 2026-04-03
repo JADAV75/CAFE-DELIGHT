@@ -63,6 +63,72 @@
             margin: 0;
             color: #333;
         }
+        .cd-dash-menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+        .cd-dash-menu-card {
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            border: 1px solid #f0ebe5;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .cd-dash-menu-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(108,74,58,0.12);
+        }
+        .cd-dash-menu-card img {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+        }
+        .cd-dash-menu-card-body {
+            padding: 14px 16px;
+        }
+        .cd-dash-menu-card-body h4 {
+            margin: 0 0 4px 0;
+            font-size: 14px;
+            font-weight: 700;
+            color: #3b2418;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .cd-dash-menu-card-body h4 .cd-dash-price {
+            color: #6C4A3A;
+            font-size: 14px;
+            font-weight: 700;
+        }
+        .cd-dash-menu-card-body p {
+            margin: 0;
+            font-size: 12px;
+            color: #9e8a78;
+        }
+        .cd-dash-menu-card-body .cd-dash-category {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            background: #f5f0eb;
+            color: #6C4A3A;
+        }
+        .cd-dash-menu-card-body .cd-dash-status-badge {
+            display: inline-block;
+            margin-top: 6px;
+            margin-left: 6px;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .cd-dash-status-active { background: #e6f4ea; color: #1e8e3e; }
+        .cd-dash-status-out { background: #fce8e6; color: #d93025; }
     </style>
 }
 
@@ -218,6 +284,82 @@
                         '<div style="font-weight:600;">' + (o.total || '') + '</div>' +
                         '<div><span style="display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;' + stStyle + '">' + (o.status || '') + '</span></div>';
                     body.appendChild(row);
+                });
+            })();
+        </script>
+
+        <h3 class="cd-admin-recent-orders-title" style="margin-top:10px;">Menu Items</h3>
+        <div class="cd-dash-menu-grid" id="dashMenuGrid">
+            <!-- Rendered by JS -->
+        </div>
+
+        <script>
+            (function () {
+                var STORAGE_KEY = 'cd_products_v1';
+                var DEFAULT_IMAGE = 'https://images.pexels.com/photos/302899/pexels-photo-302899.jpeg?auto=compress&cs=tinysrgb&w=800';
+
+                function loadProducts() {
+                    try {
+                        var raw = window.localStorage ? window.localStorage.getItem(STORAGE_KEY) : null;
+                        if (!raw) return [];
+                        var parsed = JSON.parse(raw);
+                        return Array.isArray(parsed) ? parsed : [];
+                    } catch (e) {
+                        return [];
+                    }
+                }
+
+                var products = loadProducts();
+
+                if (!products || products.length === 0) {
+                    products = [
+                        { id: "1", name: "Cappuccino", category: "Hot Coffee", price: "180.00", status: "Active", deleted: false, image: "https://images.pexels.com/photos/312418/pexels-photo-312418.jpeg?auto=compress&cs=tinysrgb&w=800" },
+                        { id: "2", name: "Butter Croissant", category: "Bakery", price: "120.00", status: "Active", deleted: false, image: "https://images.pexels.com/photos/1860209/pexels-photo-1860209.jpeg?auto=compress&cs=tinysrgb&w=800" },
+                        { id: "3", name: "Iced Mocha", category: "Cold Coffee", price: "240.00", status: "Active", deleted: false, image: "https://images.pexels.com/photos/4109744/pexels-photo-4109744.jpeg?auto=compress&cs=tinysrgb&w=800" },
+                        { id: "4", name: "Chocolate Muffin", category: "Bakery", price: "170.00", status: "Active", deleted: false, image: "https://images.pexels.com/photos/6930269/pexels-photo-6930269.jpeg?auto=compress&cs=tinysrgb&w=800" },
+                        { id: "5", name: "Double Espresso", category: "Hot Coffee", price: "140.00", status: "Active", deleted: false, image: "https://images.pexels.com/photos/2396220/pexels-photo-2396220.jpeg?auto=compress&cs=tinysrgb&w=800" }
+                    ];
+                    try { window.localStorage.setItem(STORAGE_KEY, JSON.stringify(products)); } catch(e){}
+                }
+
+                var grid = document.getElementById('dashMenuGrid');
+                if (!grid) return;
+
+                var activeProducts = products.filter(function(p) { return p && !p.deleted; });
+
+                if (activeProducts.length === 0) {
+                    grid.innerHTML = '<div style="padding:1.5rem;text-align:center;color:#b89880;font-size:0.9rem;grid-column:1/-1;">No menu items yet.</div>';
+                    return;
+                }
+
+                activeProducts.forEach(function (product) {
+                    if (!product.name) return;
+                    var name = product.name;
+                    var price = product.price || '0';
+                    var image = product.image || DEFAULT_IMAGE;
+                    var category = product.category || '';
+                    var status = (product.status || 'Active').toString();
+                    var isOut = status.toLowerCase() === 'out of stock' || status.toLowerCase() === 'out';
+
+                    var card = document.createElement('div');
+                    card.className = 'cd-dash-menu-card';
+                    card.innerHTML =
+                        '<img src="' + image + '" alt="' + name.replace(/"/g, '&quot;') + '" />' +
+                        '<div class="cd-dash-menu-card-body">' +
+                        '  <h4>' + name.replace(/</g, '&lt;').replace(/>/g, '&gt;') + ' <span class="cd-dash-price">₹' + price + '</span></h4>' +
+                        '  <p>' + (category || '') + '</p>' +
+                        '  <span class="cd-dash-category">' + (category || 'General') + '</span>' +
+                        '  <span class="cd-dash-status-badge ' + (isOut ? 'cd-dash-status-out' : 'cd-dash-status-active') + '">' + (isOut ? 'Out of Stock' : 'Active') + '</span>' +
+                        '</div>';
+
+                    var img = card.querySelector('img');
+                    if (img) {
+                        img.addEventListener('error', function () {
+                            img.src = DEFAULT_IMAGE;
+                        }, { once: true });
+                    }
+
+                    grid.appendChild(card);
                 });
             })();
         </script>
